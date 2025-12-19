@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv()
 
@@ -46,13 +47,15 @@ def def_createUser():
     u_name = data.get('username')
     u_pass = data.get('password')
 
+    hashed_password = generate_password_hash(u_pass)
+
     try:
         conn = get_db_connection()
         cur = conn.cursor()
 
         query = ("INSERT INTO users (username, password) VALUES (%s, %s) RETURNING id;")
 
-        cur.execute(query, (u_name, u_pass))
+        cur.execute(query, (u_name, hashed_password))
 
         new_id = cur.fetchone()[0]
         conn.commit()
@@ -63,6 +66,30 @@ def def_createUser():
         return jsonify({"message": "User Created"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    u_name = data.get('username')
+    u_pass = data.get('password')
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    query = ("SELECT password FROM users WHERE username = %s;", (u_name, ))
+    result = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if result:
+        stored_hash = result[0]
+
+        if check_password_hash(stored_hash, u_pass):
+            return jsonify({"message": "Login succesfull"}), 200
+    
+    return jsonify({"error": "Invalid username or password"}), 401
 
 if __name__ == '__main__':
     app.run(debug=True)
