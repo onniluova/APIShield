@@ -122,6 +122,14 @@ def addEndpoint(current_user):
         conn = get_db_connection()
         cur = conn.cursor()
 
+        cur.execute("SELECT name, url FROM endpoints WHERE name=%s AND url=%s", (name, url,))
+        existing = cur.fetchone()
+
+        if existing:
+            cur.close()
+            conn.close()
+            return jsonify({"error": "This endpoint already exists."}), 400
+
         query=("""
         INSERT INTO endpoints (user_id, url, name)
         VALUES (%s, %s, %s)
@@ -145,6 +153,11 @@ def addEndpoint(current_user):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+    finally:
+        if conn:
+            cur.close()
+            conn.close()
+
 @app.route('/runUrl', methods=['POST'])
 @tokenRequired
 def runUrl(current_user):
@@ -162,11 +175,15 @@ def runUrl(current_user):
         conn = get_db_connection()
         cur = conn.cursor()
 
-        cur.execute('SELECT user_id FROM endpoints WHERE id = %s', (endpoint_id,))
-        endpoint_owner = cur.fetchone()
+        cur.execute('SELECT user_id, url FROM endpoints WHERE id = %s', (endpoint_id, ))
+        row = cur.fetchone()
 
-        if not endpoint_owner or endpoint_id[0] != current_user:
+        token_user_id = current_user.get('user_id')
+
+        if not row or row[0] != int(token_user_id):
             return jsonify({"error": "Unauthorized access"}), 403
+        
+        url = row[1]
         
         # calculating the metrics
         start_time = time.time()
