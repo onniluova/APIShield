@@ -1,4 +1,4 @@
-# Uptime Monitor Backend
+# APIShield - Uptime Monitor Backend
 
 This is the backend for a custom API monitoring tool I'm building. It's basically a lightweight alternative to things like Uptime Kuma or Postman, but with some custom features like latency anomaly detection.
 
