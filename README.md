@@ -6,14 +6,14 @@ The goal is to have a clean dashboard where I can track my API endpoints and get
 
 ## Tech Stack
 * **Backend:** Python (Flask) using a proper MVC structure.
-* **Frontend:** React + Vite (because it's fast) and Tailwind CSS for styling.
+* **Frontend:** React + Vite and Tailwind CSS
 * **Database:** PostgreSQL.
 
 ## Features right now
 * **User Auth:** Simple JWT-based login/signup to keep things secure.
 * **Endpoint Management:** Add, view, and delete the URLs you want to track.
 * **Manual Checks:** Hit an endpoint instantly to check its status code and latency.
-* **Anomaly Detection:** This is the cool part — it looks at the last 10 checks for an endpoint and flags it if the current latency is significantly slower (3x) than the average.
+* **Anomaly Detection:** Looks at the last 10 checks for an endpoint and flags it if the current latency is significantly slower (3x) than the average.
 * **Modern UI:** Currently building out a responsive frontend with Tailwind.
 
 <img width="458" height="424" alt="image" src="https://github.com/user-attachments/assets/3cba19ee-069b-4e8e-b0e7-e63093a8622c" />
