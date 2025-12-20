@@ -27,15 +27,15 @@ I'm running this as a Mono-repo so I can manage both backend and frontend easily
 /
 ├── run.py              # The entry point to start the Flask server
 ├── /app                # Backend logic (Refactored to MVC)
-│   ├── /models         # SQL queries live here
+│   ├── /models         # SQL queries
 │   ├── /routes         # API endpoints (Blueprints)
 │   └── /services       # Heavy logic (like the anomaly math)
 │
-└── /frontend           # React Client
+└── /frontend           # React side
     ├── /src
-    │   ├── /components # Dumb UI parts (Buttons, Inputs)
-    │   ├── /pages      # Smart Views (Login, Dashboard)
-    │   └── /services   # Axios API calls
+    │   ├── /components
+    │   ├── /pages
+    │   └── /services
 
 ```
 
