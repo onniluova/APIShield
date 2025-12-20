@@ -9,21 +9,12 @@ import requests
 import time
 from datetime import datetime, UTC
 from auth import tokenRequired
+from checks import checkForLatencyAnomaly
+from db_conn import get_db_connection
 
 load_dotenv()
 
 app = Flask(__name__)
-
-DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "host": "localhost"
-}
-
-def get_db_connection():
-    conn = psycopg2.connect(**DB_CONFIG)
-    return conn
 
 @app.route('/')
 def home():
@@ -220,6 +211,11 @@ def runUrl(current_user):
         if conn:
             cur.close()
             conn.close()
+
+@app.route('/latencyAnomalyCheck', methods=['POST'])
+@tokenRequired
+def runAnomalyCheck(current_user):
+    return checkForLatencyAnomaly(current_user)
 
 if __name__ == '__main__':
     app.run(debug=True)
