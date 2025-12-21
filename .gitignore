@@ -4,5 +4,10 @@ __pycache__/
 venv/
 .env
 
+# Node / Frontend
+node_modules/
+frontend/dist/          # The build output
+frontend/.env.local     # Frontend secrets
+
 # OS
 .DS_Store

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
@@ -6,6 +7,8 @@ load_dotenv()
 
 def create_app():
     app = Flask(__name__)
+
+    CORS(app)
     
     from app.routes.auth_routes import auth_bp
     from app.routes.endpoint_routes import endpoints_bp
