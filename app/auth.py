@@ -5,7 +5,7 @@ import jwt
 from functools import wraps
 from flask import request, jsonify
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'kehitysvaiheen-salaisuus')
+SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret')
 
 def createToken(user_id, role):
     payload = {
