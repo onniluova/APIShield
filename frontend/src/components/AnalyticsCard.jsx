@@ -1,4 +1,4 @@
-export default function AnalyticsCard({ endpoint }) {
+export default function AnalyticsCard({ endpoint, liveStats }) {
     if (!endpoint) return null;
 
     return (
@@ -16,10 +16,16 @@ export default function AnalyticsCard({ endpoint }) {
                 <span className="text-white font-medium text-sm truncate w-full pr-2">
                     {endpoint.name || "Unnamed"}
                 </span>
-                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] shrink-0 mt-1 group-hover:animate-pulse"></div>
+                {liveStats?.is_up !== undefined && (
+                    <div className={'w-2 h-2 rounded-full shrink-0 mt-1 group-hover:animate-pulse'
+                        ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)"
+                        : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)"
+                    }>
+                    </div> 
+                )}
             </div>
 
-            <div className="relative h-8 w-full">
+            <div className="relative h-15 w-full">
                 
                 <span className="
                     absolute top-0 left-0 w-full
@@ -28,6 +34,16 @@ export default function AnalyticsCard({ endpoint }) {
                     group-hover:opacity-0 group-hover:translate-y-2
                 ">
                     {endpoint.url}
+                
+                    {liveStats?.is_up !== undefined && (
+                        <div className={`flex flex-col gap-1 ${liveStats?.is_up? "text-emerald-500" : "text-red-500"}`}>
+                            <ul>
+                                <li>{liveStats.is_up ? "ONLINE" : "OFFLINE"}</li>
+                                <li>Status code: {liveStats.status_code}</li>
+                                <li>Checked at: {liveStats.checked_at}</li>
+                            </ul>
+                        </div>
+                    )}
                 </span>
 
                 <div className="
@@ -37,10 +53,7 @@ export default function AnalyticsCard({ endpoint }) {
                     transition-all duration-300
                     group-hover:opacity-100 group-hover:translate-y-0
                 ">
-                    <span>Manage Endpoint</span>
-                    <svg className="w-3 h-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                    <span>See full analysis</span>
                 </div>
 
             </div>

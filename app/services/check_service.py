@@ -25,7 +25,9 @@ class CheckService():
         return {
             "endpoint_id": endpoint_id,
             "status": status_code,
-            "latency": latency_ms
+            "latency_ms": latency_ms,
+            "is_up": is_up,
+            "checked_at": checked_at.isoformat()
         }
     @staticmethod
     def check_anomaly(endpoint_id):

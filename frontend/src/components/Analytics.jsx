@@ -4,16 +4,17 @@ import Button from "./Button";
 import { getEndpoints } from "../services/endpointService";
 import { RotateLoader } from 'react-spinners';
 import AnalyticsCard from "./AnalyticsCard";
+import useEndpointMonitor from "../hooks/useEndpointMonitor";
 
 export default function Analytics() {
     const [endpoints, setEndpoints] = useState([]);
     const [loading, setLoading] = useState(true);
-    
-    // Determine initial count based on screen width
-    // Mobile (<768px): 6 items (2x3)
-    // Desktop (>=768px): 9 items (3x3)
+
+    // determine screen width for the card responsivity
     const getInitialCount = () => window.innerWidth < 768 ? 6 : 9;
     const [visibleCount, setVisibleCount] = useState(getInitialCount());
+
+    const liveStats = useEndpointMonitor(endpoints);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,9 +83,10 @@ export default function Analytics() {
                                 <AnalyticsCard
                                     key={endpoint.id || endpoints.name}
                                     endpoint={endpoint}
+                                    liveStats={liveStats[endpoint.id]}
                                 >
                                 </AnalyticsCard>
-                            ))};
+                            ))}
                         </ul>
 
                         {endpoints.length > getInitialCount() && (
