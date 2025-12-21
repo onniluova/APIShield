@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './style.css'
 
 import {
@@ -9,11 +8,15 @@ import {
 } from 'react-router-dom'
 
 import Login from "./pages/Login"
+import Home from "./pages/Home"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Login />} />
+      <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} 
+      />
     </>
   )
 )
