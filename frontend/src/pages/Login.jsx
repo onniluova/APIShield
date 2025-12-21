@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router";
 import Button from '../components/Button';
 import Header from '../components/Header';
@@ -12,6 +12,10 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     let navigate = useNavigate();
 
+    useEffect(() => {
+        localStorage.clear();
+    }, []);
+
     const handleLoginClick = async () => {
         setLoading(true)
 
@@ -24,11 +28,11 @@ const Login = () => {
             localStorage.setItem("user_id", user_id);
 
             console.log("Success", response.data)
+            navigate("/home");
         } catch(error) {
             console.log("Login failed:", error);
         } finally {
             setLoading(false);
-            navigate("/home");
         }
     };
 
