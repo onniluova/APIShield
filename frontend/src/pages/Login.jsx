@@ -17,10 +17,11 @@ const Login = () => {
 
         try {
             const response = await loginAuth(username, password);
-            const { token, role } = response.data;
+            const { token, role, user_id } = response.data;
 
             localStorage.setItem("authToken", token);
             localStorage.setItem("userRole", role);
+            localStorage.setItem("user_id", user_id);
 
             console.log("Success", response.data)
         } catch(error) {

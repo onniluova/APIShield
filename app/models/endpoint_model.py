@@ -34,3 +34,24 @@ class EndpointModel:
         finally:
             cur.close()
             conn.close()
+
+    @staticmethod
+    def get_all_endpoints(user_id):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            row = cur.execute('SELECT id, url, name FROM endpoints WHERE user_id = %s', (user_id,))
+            rows = cur.fetchall()
+
+            results = []
+            for row in rows:
+                results.append({
+                    "id": row[0],
+                    "url": row[1],
+                    "name": row[2]
+                })
+
+            return results
+        finally:
+            cur.close()
+            conn.close()

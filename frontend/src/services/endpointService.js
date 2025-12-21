@@ -1,11 +1,19 @@
 import api from "./api"
 
-export const getEndpoints = async (u_id) => {
+export const getEndpoints = async () => {
     return api.get("/getEndpoints");
 }
 
-export const runUrls = async (url) => {
+export const addEndpoint = async (user_id, url, name) => {
+    return api.post("/addEnpoint"), {
+        "user_id": user_id,
+        "url": url,
+        "name": name
+    };
+}
+
+export const runUrl = async (endpoint_id) => {
     return api.post("/runUrl", {
-        "url": url
+        "endpoint_id": endpoint_id
     });
 }

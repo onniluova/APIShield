@@ -70,7 +70,8 @@ def login():
             return jsonify({
                 "message": "Login successful",
                 "token": token,
-                "role": role
+                "role": role,
+                "user_id": user_id
             }), 200
     
     return jsonify({"error": "Invalid username or password"}), 401
