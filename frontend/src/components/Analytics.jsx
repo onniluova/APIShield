@@ -3,6 +3,7 @@ import Header from "./Header";
 import Button from "./Button";
 import { getEndpoints } from "../services/endpointService";
 import { RotateLoader } from 'react-spinners';
+import AnalyticsCard from "./AnalyticsCard";
 
 export default function Analytics() {
     const [endpoints, setEndpoints] = useState([]);
@@ -78,22 +79,12 @@ export default function Analytics() {
                     <>
                         <ul className="grid grid-cols-2 md:grid-cols-3 gap-3 transition-all duration-300">
                             {endpoints.slice(0, visibleCount).map(endpoint => (
-                                <li 
-                                    key={endpoint.id || endpoint.name}
-                                    className="group relative bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 transition-all duration-200 flex flex-col justify-between h-24"
+                                <AnalyticsCard
+                                    key={endpoint.id || endpoints.name}
+                                    endpoint={endpoint}
                                 >
-                                    <div className="flex justify-between items-start">
-                                        <span className="text-white font-medium text-sm truncate w-full pr-2">
-                                            {endpoint.name || "Unnamed"}
-                                        </span>
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] shrink-0 mt-1"></div>
-                                    </div>
-
-                                    <span className="text-emerald-400/70 text-[10px] font-mono break-all line-clamp-2 leading-tight">
-                                        {endpoint.url}
-                                    </span>
-                                </li>
-                            ))}
+                                </AnalyticsCard>
+                            ))};
                         </ul>
 
                         {endpoints.length > getInitialCount() && (
