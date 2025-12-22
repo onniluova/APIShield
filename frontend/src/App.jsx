@@ -10,6 +10,7 @@ import {
 import Login from "./pages/Login"
 import Home from "./pages/Home"
 import ProtectedRoute from "./components/ProtectedRoute"
+import { UserProvider } from './context/userContext'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,7 +23,11 @@ const router = createBrowserRouter(
 )
 
 const App = () => {
-  return <RouterProvider router={router} />
+  return (
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
+  )
 }
 
 export default App

@@ -38,10 +38,5 @@ export default function useEndpointMonitor(endpoints) {
         checkEndpoints();
     }, [endpoints])
 
-    useEffect(() => {
-        // This runs every time liveStats changes
-        console.log("Updated Live Stats:", liveStats);
-    }, [liveStats]);
-
     return liveStats;
 }

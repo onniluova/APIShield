@@ -2,9 +2,12 @@ import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import Analytics from "../components/Analytics";
 import { useNavigate } from "react-router";
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
 
 const Home = () => {
     let navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
 
     const handleLogoutClick = async () => {
         localStorage.clear()

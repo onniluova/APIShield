@@ -1,20 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from "react-router";
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import { RotateLoader } from 'react-spinners';
 import { loginAuth, registerAuth } from '../services/authService';
+import { UserContext } from '../context/userContext';
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const { user, setUser } = useContext(UserContext)
     let navigate = useNavigate();
 
     useEffect(() => {
         localStorage.clear();
     }, []);
+
+    // navigate after user state has been updated
+    useEffect(() => {
+        console.log("User state updated:", user);
+        
+        if (user.user_id) {
+             navigate("/home");
+        }
+    }, [user, navigate]);
 
     const handleLoginClick = async () => {
         setLoading(true)
@@ -24,11 +35,15 @@ const Login = () => {
             const { token, role, user_id } = response.data;
 
             localStorage.setItem("authToken", token);
-            localStorage.setItem("userRole", role);
-            localStorage.setItem("user_id", user_id);
+            
+            setUser({
+                user_id: user_id,
+                username: username,
+                role: role
+            })
 
             console.log("Success", response.data)
-            navigate("/home");
+            console.log(user);
         } catch(error) {
             console.log("Login failed:", error);
         } finally {
@@ -109,7 +124,7 @@ const Login = () => {
                             className="w-full text-white border border-gray-200 hover:bg-slate-200 hover:text-gray-500 shadow-none"
                         >
                             {loading ? (
-                                <RotateLoader color="white" loading={loading} size={8} margin={2} />
+                                <RotateLoader color="white" loading={loading} size={5} margin={2} />
                             ) : (
                                 "Create Account"
                             )}
