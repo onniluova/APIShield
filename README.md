@@ -2,7 +2,7 @@
 
 This is a custom API monitoring tool I'm building. It's basically a lightweight alternative to things like Uptime Kuma or Postman, but with some custom features I wanted, like latency anomaly detection.
 
-DEMO LINK: [https://apishield-web.vercel.app]
+# DEMO LINK: [https://apishield-web.vercel.app]
 
 The goal is to have a clean dashboard where I can track my API endpoints and get flagged if they start responding slower than usual.
 
