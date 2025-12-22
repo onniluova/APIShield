@@ -2,6 +2,8 @@
 
 This is a custom API monitoring tool I'm building. It's basically a lightweight alternative to things like Uptime Kuma or Postman, but with some custom features I wanted, like latency anomaly detection.
 
+DEMO LINK: [https://apishield-93ejvv4i9-onnis-projects-ef9902da.vercel.app]
+
 The goal is to have a clean dashboard where I can track my API endpoints and get flagged if they start responding slower than usual.
 
 ## Tech Stack
@@ -16,7 +18,7 @@ The goal is to have a clean dashboard where I can track my API endpoints and get
 * **Anomaly Detection:** Looks at the last 10 checks for an endpoint and flags it if the current latency is significantly slower (3x) than the average.
 * **Modern UI:** Currently building out a responsive frontend with Tailwind.
 
-<img width="458" height="424" alt="image" src="https://github.com/user-attachments/assets/3cba19ee-069b-4e8e-b0e7-e63093a8622c" />
+<img width="986" height="656" alt="image" src="https://github.com/user-attachments/assets/6d254590-6c8c-4cd4-bc05-b88336889f78" />
 
 ---
 
