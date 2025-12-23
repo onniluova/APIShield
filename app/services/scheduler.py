@@ -4,6 +4,7 @@ import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.models.endpoint_model import EndpointModel
 from app.services.check_service import CheckService
+from app.models.checks_model import CheckModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,7 +41,7 @@ def scheduleEndpoints(app):
 
 def deleteOldChecks():
     try:
-        deleted = CheckService.delete_old_checks()
+        deleted = CheckModel.delete_old_checks()
         logger.info(f"Cleaned up {deleted} old check records.")
     except Exception as e:
         logger.error(f"Cleanup failed: {e}")

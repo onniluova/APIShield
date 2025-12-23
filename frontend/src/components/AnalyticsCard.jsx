@@ -9,7 +9,6 @@ export default function AnalyticsCard({ endpoint, liveStats }) {
         return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     };
 
-    // 1. Determine Status Color (Green, Red, or Gray for Pending)
     let statusColor = "bg-slate-500 shadow-[0_0_8px_rgba(100,116,139,0.5)]"; // Default Gray
     let statusText = "PENDING";
     let textColor = "text-slate-300";
@@ -24,8 +23,6 @@ export default function AnalyticsCard({ endpoint, liveStats }) {
         textColor = "text-red-400";
     }
 
-    // 2. Decide: Show Content OR Show Spinner?
-    // We show content if liveStats exists (even if it's just "Pending" data)
     const showContent = liveStats !== undefined;
 
     return (
@@ -44,7 +41,6 @@ export default function AnalyticsCard({ endpoint, liveStats }) {
                     {endpoint.name || "Unnamed"}
                 </span>
                 
-                {/* Status Dot */}
                 {showContent && (
                     <div className={`w-2 h-2 rounded-full shrink-0 mt-1 group-hover:animate-pulse ${statusColor}`} /> 
                 )}
