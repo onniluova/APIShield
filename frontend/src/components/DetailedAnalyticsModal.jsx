@@ -29,6 +29,7 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                 const response = await getEndpointStats(endpoint_id);
                 setHistory(response.data.history || []);
                 setStats(response.data);
+                console.log(stats)
             } catch(error) {
                 toast.error("Failed to load stats.");
                 onClose();
@@ -41,10 +42,13 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
     }, [endpoint_id]);
 
     const formattedData = history.map(item => ({
-        time: new Date(item.checked_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        time: new Date(item.checked_at).toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            hour12: false 
+        }),
         latency: item.latency_ms
     }));
-
     const getGradientOffset = () => {
         if (formattedData.length === 0) return 0;
         
@@ -138,6 +142,8 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                                 />
                             </LineChart>
                         </ResponsiveContainer>
+                        
+                        <div className="text-white">Uptime: {stats.uptime}%</div>
                     </div>
                 )}
             </motion.div>
