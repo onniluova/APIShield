@@ -60,12 +60,6 @@ def get_endpoint_stats(current_user, id):
     history = CheckModel.get_recent_checks(id, limit=20)
     uptime = CheckModel.get_uptime_stats(id)
 
-    response = make_response(jsonify(stats))
-    
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-
     return jsonify({
         "history": history,
         "uptime": uptime,

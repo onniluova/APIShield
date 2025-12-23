@@ -1,7 +1,7 @@
 import api from "./api"
 
 export const getEndpoints = async () => {
-    return api.get("/getEndpoints");
+    return api.get(`/getEndpoints?t=${Date.now()}`);
 }
 
 export const addEndpoint = async (name, url) => {
