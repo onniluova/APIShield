@@ -9,7 +9,7 @@ export default function AnalyticsCard({ endpoint, liveStats }) {
         return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     };
 
-    let statusColor = "bg-slate-500 shadow-[0_0_8px_rgba(100,116,139,0.5)]"; // Default Gray
+    let statusColor = "bg-slate-500 shadow-[0_0_8px_rgba(100,116,139,0.5)]";
     let statusText = "PENDING";
     let textColor = "text-slate-300";
 
