@@ -9,16 +9,19 @@ checks_bp = Blueprint('checks', __name__)
 @tokenRequired
 def runUrl(current_user):
     data = request.get_json()
-    endpoint_id = data.get('endpoint_id')
+
+    endpoint_id = data.get('endpoint_id') 
 
     endpoint_row = EndpointModel.get_by_id(endpoint_id)
+    
     if not endpoint_row:
         return jsonify({"error": "Endpoint not found"}), 404
     
-    if endpoint_row[0] != int(current_user['user_id']):
+    if endpoint_row['user_id'] != int(current_user['user_id']):
         return jsonify({"error": "Unauthorized"}), 403
 
-    url = endpoint_row[1]
+    url = endpoint_row['url']
+    
     result = CheckService.perform_check(endpoint_id, url)
 
     return jsonify({"message": "Check complete", "data": result}), 200

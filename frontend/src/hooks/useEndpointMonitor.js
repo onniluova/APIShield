@@ -17,7 +17,7 @@ export default function useEndpointMonitor(endpoints) {
                     setLiveStats(prev => ({
                         ...prev,
                         [ep.id]: {
-                            "is_up": checkRes.data.data.is_up || "online",
+                            "is_up": checkRes.data.data.is_up,
                             "status_code": checkRes.data.data.status || "0",
                             "latency_ms": checkRes.data.data.latency_ms || "0ms",
                             "checked_at": checkRes.data.data.checked_at || "",
@@ -27,9 +27,10 @@ export default function useEndpointMonitor(endpoints) {
                 setLiveStats(prev => ({
                     ...prev,
                     [ep.id]: {
-                        status: "offline",
-                        latency: "0ms",
-                        uptime: "0"
+                        is_up: false, 
+                        status_code: "Err",
+                        latency_ms: "0ms",
+                        checked_at: new Date().toISOString()
                     }
                 }))
             }
