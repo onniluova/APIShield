@@ -1,4 +1,5 @@
 from app.db_conn import get_db_connection
+from psycopg2.extras import RealDictCursor
 
 class EndpointModel:
     @staticmethod
@@ -27,9 +28,9 @@ class EndpointModel:
     @staticmethod
     def get_by_id(endpoint_id):
         conn = get_db_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         try:
-            cur.execute('SELECT user_id, url FROM endpoints WHERE id = %s', (endpoint_id,))
+            cur.execute('SELECT * FROM endpoints WHERE id = %s', (endpoint_id,))
             return cur.fetchone()
         finally:
             cur.close()

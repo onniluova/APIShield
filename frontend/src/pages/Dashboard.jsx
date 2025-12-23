@@ -3,11 +3,12 @@ import Button from "../components/Button";
 import Analytics from "../components/Analytics";
 import { useState } from 'react';
 import AddEndpointModal from "../components/AddEndpointModal";
+import DetailedAnalyticsModal from "../components/DetailedAnalyticsModal";
 import { AnimatePresence } from "framer-motion";
 
 const Dashboard = () => {
     const [onAddEndpoint, setOnAddEndpoint] = useState(false);
-
+    const [selectedEndpointId, setSelectedEndpointId] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handleSuccess = () => {
@@ -19,7 +20,7 @@ const Dashboard = () => {
             <Navbar />
 
             <div className="flex flex-grow flex-col justify-center items-center gap-6 z-10">
-                <Analytics refreshTrigger={refreshTrigger} />
+                <Analytics refreshTrigger={refreshTrigger} onCardClick={(id) => setSelectedEndpointId(id)}/>
                 
                 <Button 
                     onClick={() => setOnAddEndpoint(true)}
@@ -34,6 +35,15 @@ const Dashboard = () => {
                     <AddEndpointModal 
                         onClose={() => setOnAddEndpoint(false)} 
                         onSuccess={handleSuccess}
+                    />
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {selectedEndpointId && (
+                    <DetailedAnalyticsModal 
+                        endpoint_id={selectedEndpointId}
+                        onClose={() => setSelectedEndpointId(false)} 
                     />
                 )}
             </AnimatePresence>

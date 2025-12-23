@@ -5,7 +5,7 @@ import { RotateLoader } from 'react-spinners';
 import AnalyticsCard from "./AnalyticsCard";
 import useEndpointMonitor from "../hooks/useEndpointMonitor";
 
-export default function Analytics({ refreshTrigger }) {
+export default function Analytics({ refreshTrigger, onCardClick }) {
     const [endpoints, setEndpoints] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -79,12 +79,16 @@ export default function Analytics({ refreshTrigger }) {
                     <>
                         <ul className="grid grid-cols-2 md:grid-cols-3 gap-3 transition-all duration-300">
                             {endpoints.slice(0, visibleCount).map(endpoint => (
-                                <AnalyticsCard
-                                    key={endpoint.id || endpoints.name}
-                                    endpoint={endpoint}
-                                    liveStats={liveStats[endpoint.id]}
+                                <div 
+                                    key={endpoint.id} 
+                                    onClick={() => onCardClick(endpoint.id)}
+                                    className="cursor-pointer hover:scale-105 transition-transform duration-200"
                                 >
-                                </AnalyticsCard>
+                                    <AnalyticsCard
+                                        endpoint={endpoint}
+                                        liveStats={liveStats[endpoint.id]}
+                                    />
+                                </div>
                             ))}
                         </ul>
 

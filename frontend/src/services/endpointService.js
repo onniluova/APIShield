@@ -16,3 +16,7 @@ export const runUrl = async (endpoint_id) => {
         "endpoint_id": endpoint_id
     });
 }
+
+export const getEndpointStats = (id) => {
+    return api.get(`/${id}/stats`);
+};

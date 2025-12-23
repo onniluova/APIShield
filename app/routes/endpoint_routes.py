@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.auth import tokenRequired
 from app.models.endpoint_model import EndpointModel
+from app.models.checks_model import CheckModel
 from app.services.check_service import CheckService
 
 endpoints_bp = Blueprint('endpoints', __name__)
@@ -43,3 +44,23 @@ def getEndpoints(current_user):
         "message": "Endpoints fetched succesfully",
         "endpoints": endpoints
     }), 201
+
+@endpoints_bp.route('/<int:id>/stats', methods=['GET'])
+@tokenRequired
+def get_endpoint_stats(current_user, id):
+    user_id = current_user['user_id']
+    
+    endpoint = EndpointModel.get_by_id(id)
+
+    if not endpoint or endpoint['user_id'] != user_id:
+         return jsonify({"error": "Endpoint not found or unauthorized"}), 403
+
+    history = CheckModel.get_recent_checks(id, limit=20)
+    uptime = CheckModel.get_uptime_stats(id)
+
+    return jsonify({
+        "history": history,
+        "uptime": uptime,
+        "endpoint_name": endpoint['name'],
+        "endpoint_url": endpoint['url']
+    }), 200
