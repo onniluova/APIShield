@@ -64,3 +64,21 @@ class CheckModel:
             return 0
             
         return round((stats['successful_checks'] / stats['total_checks']) * 100, 2)
+    
+    @staticmethod
+    def delete_old_checks():
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        try: 
+            query = """
+                DELETE FROM checks WHERE checked_at < (NOW() - INTERVAL '7 days')
+            """
+            cur.execute(query)
+            conn.commit()
+
+            return cur.rowcount
+        
+        finally:
+            cur.close()
+            conn.close()

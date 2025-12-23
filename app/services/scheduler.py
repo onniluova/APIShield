@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 def start_scheduler(app):
     scheduler = BackgroundScheduler()
     scheduler.add_job(scheduleEndpoints, 'interval', seconds=30)
+    scheduler.add_job(deleteOldChecks, 'interval', seconds=600)
     scheduler.start()
 
 def scheduleEndpoints():
@@ -23,3 +24,6 @@ def scheduleEndpoints():
 
     for endpoint in endpoints:
         CheckService.perform_check(endpoint['id'], endpoint['url'])
+
+def deleteOldChecks():
+    CheckService.delete_old_checks()
