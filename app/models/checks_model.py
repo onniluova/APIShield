@@ -72,7 +72,7 @@ class CheckModel:
         
         try: 
             query = """
-                DELETE FROM checks WHERE checked_at < (NOW() - INTERVAL '7 days')
+                DELETE FROM checks WHERE checked_at < (NOW() - INTERVAL '2 days')
             """
             cur.execute(query)
             conn.commit()
