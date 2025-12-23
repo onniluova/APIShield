@@ -23,7 +23,7 @@ def start_scheduler(app):
 def scheduleEndpoints(app):
     with app.app_context():
         try:
-            logger.info("⏳ Running scheduled checks...")
+            logger.info("Running scheduled checks...")
             endpoints = EndpointModel.get_every_endpoint()
 
             if not endpoints:
