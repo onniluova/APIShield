@@ -18,5 +18,5 @@ export const runUrl = async (endpoint_id) => {
 }
 
 export const getEndpointStats = (id) => {
-    return api.get(`/${id}/stats`);
+    return api.get(`/${id}/stats?t=${Date.now()}`);
 };
