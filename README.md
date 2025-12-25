@@ -20,7 +20,7 @@ This project was built to demonstrate a full production pipeline: from a Python 
 
 <img width="1392" height="862" alt="image" src="https://github.com/user-attachments/assets/94da953c-7b07-4864-addf-47fe729fc9f5" />
 
-# Architeture Diagram
+## Architeture Diagram
 ![ArchitectureDiagram](https://github.com/user-attachments/assets/7619d905-2358-479e-b0be-d55930846c3c)
 
 ## Key Features
@@ -299,3 +299,4 @@ CREATE TABLE checks (
 * [ ] Add JSON schema validation to ensure APIs aren't just "up" but returning correct data.
 
 >>>>>>> Stashed changes
+
