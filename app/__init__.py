@@ -11,7 +11,7 @@ def create_app():
 
     allowed_origins = [
         "http://localhost:5173",
-        "https://vahti.vercel.app",
+        "https://vahti-web.vercel.app",
         "https://apishield.vercel.app"
     ]
 
