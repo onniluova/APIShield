@@ -3,10 +3,10 @@ import Header from "./Header";
 import { getEndpoints } from "../services/endpointService";
 import AnalyticsCard from "./AnalyticsCard";
 import useEndpointMonitor from "../hooks/useEndpointMonitor";
-
 import LoadingState from "./LoadingState";
 import EmptyState from "./EmptyState";
 import AnalyticsGrid from "./AnalyticsGrid";
+import toast from 'react-hot-toast';
 
 export default function Analytics({ refreshTrigger, onCardClick }) {
     const [endpoints, setEndpoints] = useState([]);
@@ -14,25 +14,22 @@ export default function Analytics({ refreshTrigger, onCardClick }) {
 
     const liveStats = useEndpointMonitor(endpoints);
 
+    const safeEndpoints = endpoints || []; 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await getEndpoints();
-                setEndpoints(response.data.endpoints);
+                setEndpoints(response.data.endpoints || []); 
             } catch(error) {
-                console.log("Error:", error);
+                toast.error(error)
             } finally {
                 setLoading(false);
             }
         }
         fetchData();
     }, [refreshTrigger]);
-
-    const isFewItems = endpoints.length < 3;
-    const containerClasses = isFewItems 
-        ? "flex flex-wrap justify-center"
-        : "grid grid-cols-2 md:grid-cols-3";
-
+    
     return ( 
         <div className="w-full max-w-4xl mx-auto p-4 flex flex-col gap-6 h-full">
 
@@ -47,17 +44,17 @@ export default function Analytics({ refreshTrigger, onCardClick }) {
                 
                 {loading && <LoadingState />}
 
-                {!loading && endpoints.length === 0 && (
+                {!loading && safeEndpoints.length === 0 && (
                     <EmptyState title="No endpoints found" subtitle="Add one to get started!" />
                 )}
 
-                {!loading && endpoints.length > 0 && (
-                    <AnalyticsGrid itemCount={endpoints.length}>
-                        {endpoints.map(endpoint => (
+                {!loading && safeEndpoints.length > 0 && (
+                    <AnalyticsGrid itemCount={safeEndpoints.length}>
+                        {safeEndpoints.map(endpoint => (
                             <div 
                                 key={endpoint.id} 
                                 onClick={() => onCardClick(endpoint.id)}
-                                className={`cursor-pointer hover:scale-105 transition-transform duration-200 ${endpoints.length < 3 ? 'w-full max-w-sm' : ''}`}
+                                className={`cursor-pointer hover:scale-105 transition-transform duration-200 ${safeEndpoints.length < 3 ? 'w-full max-w-sm' : ''}`}
                             >
                                 <AnalyticsCard
                                     endpoint={endpoint}

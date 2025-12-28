@@ -29,7 +29,6 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                 const response = await getEndpointStats(endpoint_id);
                 setHistory(response.data.history || []);
                 setStats(response.data);
-                console.log(stats)
             } catch(error) {
                 toast.error("Failed to load stats.");
                 onClose();
@@ -49,6 +48,7 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
         }),
         latency: item.latency_ms
     }));
+
     const getGradientOffset = () => {
         if (formattedData.length === 0) return 0;
         
@@ -109,41 +109,49 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                         <RotateLoader color={goodColor} size={10} />
                     </div>
                 ) : (
-                    <div className="h-64 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={formattedData}>
-                                <defs>
-                                    <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset={off} stopColor={badColor} stopOpacity={1} />
-                                        <stop offset={off} stopColor={goodColor} stopOpacity={1} />
-                                    </linearGradient>
-                                </defs>
+                    <div className="h-64 w-full min-w-0">
+                        {formattedData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                                <LineChart data={formattedData}>
+                                    <defs>
+                                        <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset={off} stopColor={badColor} stopOpacity={1} />
+                                            <stop offset={off} stopColor={goodColor} stopOpacity={1} />
+                                        </linearGradient>
+                                    </defs>
 
-                                <XAxis dataKey="time" stroke={axisColor} opacity={0.5} tick={{fontSize: 12}} />
-                                <YAxis stroke={axisColor} opacity={0.5} tick={{fontSize: 12}} width={40}/>
-                                
-                                <Tooltip 
-                                    contentStyle={{ 
-                                        backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                        borderRadius: '8px',
-                                        color: '#fff'
-                                    }}
-                                    itemStyle={{ color: '#fff' }}
-                                    labelStyle={{ color: '#ccc', marginBottom: '4px' }}
-                                />
-                                <Line 
-                                    type="monotone" 
-                                    dataKey="latency" 
-                                    stroke="url(#splitColor)" 
-                                    strokeWidth={3}
-                                    dot={false}
-                                    activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
+                                    <XAxis dataKey="time" stroke={axisColor} opacity={0.5} tick={{fontSize: 12}} />
+                                    <YAxis stroke={axisColor} opacity={0.5} tick={{fontSize: 12}} width={40}/>
+                                    
+                                    <Tooltip 
+                                        contentStyle={{ 
+                                            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            borderRadius: '8px',
+                                            color: '#fff'
+                                        }}
+                                        itemStyle={{ color: '#fff' }}
+                                        labelStyle={{ color: '#ccc', marginBottom: '4px' }}
+                                    />
+                                    <Line 
+                                        type="monotone" 
+                                        dataKey="latency" 
+                                        stroke="url(#splitColor)" 
+                                        strokeWidth={3}
+                                        dot={false}
+                                        activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex h-full items-center justify-center text-white/50">
+                                No data available for this period.
+                            </div>
+                        )}
                         
-                        <div className="text-white">Uptime: {stats.uptime}%</div>
+                        <div className="text-white mt-2 text-center text-sm">
+                            Uptime: {stats.uptime}%
+                        </div>
                     </div>
                 )}
             </motion.div>

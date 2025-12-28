@@ -40,7 +40,7 @@ def getEndpoints(current_user):
     endpoints = EndpointModel.get_all_endpoints(user_id)
 
     if not endpoints:
-        return jsonify({"error": "This user has no endpoints"}), 400
+        return jsonify({"message": "This user has no endpoints"}), 200
     
     return jsonify({
         "message": "Endpoints fetched succesfully",
