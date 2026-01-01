@@ -1,4 +1,4 @@
-# Vahti - Uptime Monitor
+![wmremove-transformed](https://github.com/user-attachments/assets/2f7ecd80-6968-4b18-ae82-2c3a6b59fe2b)
 
 Vahti is a custom API monitoring tool designed to track endpoint availability and performance. Unlike basic uptime monitors, it includes a custom latency anomaly detection engine that flags endpoints performing significantly worse than their historical average.
 
@@ -139,4 +139,11 @@ CREATE TABLE checks (
 * [x] Deploy to Production (Render/Vercel).
 * [x] Implement APScheduler for background interval monitoring (1min/5min checks).
 * [x] Visualize historical latency data with Recharts.
+* [x] Add timeline selection to charts.
+* [ ] Implement settings menu.
+* [ ] Implement profile page.
+* [ ] Administration tools for user and endpoint monitoring.
+
+
+
 
