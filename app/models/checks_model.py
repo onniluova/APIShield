@@ -21,19 +21,27 @@ class CheckModel:
             conn.close()
     
     @staticmethod
-    def get_recent_checks(endpoint_id, limit=50):
+    def get_recent_checks(endpoint_id, start_date=None, end_date=None, limit=10):
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         
-        query = """
-            SELECT status_code, latency_ms, is_up, checked_at 
-            FROM checks 
-            WHERE endpoint_id = %s 
-            ORDER BY checked_at DESC 
-            LIMIT %s
-        """
+        sql_parts = ["SELECT status_code, latency_ms, is_up, checked_at FROM checks WHERE endpoint_id = %s"]
+        params = [endpoint_id]
+
+        if start_date:
+            sql_parts.append("AND checked_at >= %s")
+            params.append(start_date)
+
+        if end_date:
+            sql_parts.append("AND checked_at <= %s")
+            params.append(f"{end_date} 23:59:59")
+
+        sql_parts.append("ORDER BY checked_at DESC LIMIT %s")
+        params.append(limit)
+
+        query = " ".join(sql_parts)
         
-        cur.execute(query, (endpoint_id, limit))
+        cur.execute(query, tuple(params))
         results = cur.fetchall()
         
         cur.close()
@@ -48,7 +56,6 @@ class CheckModel:
         query = """
             SELECT 
                 COUNT(*) as total_checks,
-                -- FIX: Compare is_up to TRUE, not 1
                 SUM(CASE WHEN is_up = TRUE THEN 1 ELSE 0 END) as successful_checks
             FROM checks 
             WHERE endpoint_id = %s
@@ -72,7 +79,7 @@ class CheckModel:
         
         try: 
             query = """
-                DELETE FROM checks WHERE checked_at < (NOW() - INTERVAL '2 days')
+                DELETE FROM checks WHERE checked_at < (NOW() - INTERVAL '7 days')
             """
             cur.execute(query)
             conn.commit()

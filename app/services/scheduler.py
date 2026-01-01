@@ -15,7 +15,7 @@ def start_scheduler(app):
 
     scheduler = BackgroundScheduler()
     
-    scheduler.add_job(lambda: scheduleEndpoints(app), 'interval', seconds=30)
+    scheduler.add_job(lambda: scheduleEndpoints(app), 'interval', seconds=180)
     scheduler.add_job(deleteOldChecks, 'interval', seconds=600)
     
     scheduler.start()

@@ -21,12 +21,14 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
     const [loading, setLoading] = useState(true);
     const [history, setHistory] = useState([]);
     const [stats, setStats] = useState(null);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     useEffect(() => {
         const loadAnalytics = async () => {
             setLoading(true);
             try {
-                const response = await getEndpointStats(endpoint_id);
+                const response = await getEndpointStats(endpoint_id, startDate, endDate, 500);
                 setHistory(response.data.history || []);
                 setStats(response.data);
             } catch(error) {
@@ -38,16 +40,33 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
         }
         
         if (endpoint_id) loadAnalytics();
-    }, [endpoint_id]);
+    }, [endpoint_id, startDate, endDate]);
 
     const formattedData = history.map(item => ({
-        time: new Date(item.checked_at).toLocaleTimeString([], { 
+        timestamp: item.checked_at, 
+        latency: item.latency_ms
+    }));
+
+    const formatDate = (dateStr) => {
+        return new Date(dateStr).toLocaleDateString([], { 
+            month: 'short', 
+            day: 'numeric' 
+        });
+    };
+
+    const formatTime = (dateStr) => {
+        return new Date(dateStr).toLocaleTimeString([], { 
             hour: '2-digit', 
             minute: '2-digit', 
             hour12: false 
-        }),
-        latency: item.latency_ms
-    }));
+        });
+    };
+
+    useEffect(() => {
+        if (formattedData.length > 0) {
+            console.log("Formatted Data:", formattedData);
+        }
+    }, [formattedData]);
 
     const getGradientOffset = () => {
         if (formattedData.length === 0) return 0;
@@ -120,7 +139,14 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                                         </linearGradient>
                                     </defs>
 
-                                    <XAxis dataKey="time" stroke={axisColor} opacity={0.5} tick={{fontSize: 12}} />
+                                    <XAxis 
+                                        dataKey="timestamp" 
+                                        stroke={axisColor} 
+                                        opacity={0.5} 
+                                        tick={{fontSize: 12}}
+                                        minTickGap={30}
+                                        tickFormatter={formatDate} 
+                                    />
                                     <YAxis stroke={axisColor} opacity={0.5} tick={{fontSize: 12}} width={40}/>
                                     
                                     <Tooltip 
@@ -132,6 +158,7 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                                         }}
                                         itemStyle={{ color: '#fff' }}
                                         labelStyle={{ color: '#ccc', marginBottom: '4px' }}
+                                        labelFormatter={formatTime}
                                     />
                                     <Line 
                                         type="monotone" 
@@ -149,8 +176,29 @@ export default function DetailedAnalyticsModal({ onClose, endpoint_id }) {
                             </div>
                         )}
                         
-                        <div className="text-white mt-2 text-center text-sm">
+                        <div className="flex flex-row justify-center text-white mt-2 text-center text-sm gap-2">
                             Uptime: {stats.uptime}%
+                        </div>
+                        
+                        <div className="flex flex-row text-white w-full mt-5 mx-auto max-w-md justify-center bg-purple-500/50 rounded rounded-md">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                                <p>Start date</p>
+                                <input
+                                type="date"
+                                id="start"
+                                name="date-start"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                />
+                                <p>End date</p>
+                                <input
+                                type="date"
+                                id="end"
+                                name="date-end"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}

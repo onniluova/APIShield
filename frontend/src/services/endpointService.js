@@ -21,6 +21,12 @@ export const runUrl = async (endpoint_id) => {
     });
 }
 
-export const getEndpointStats = (id) => {
-    return api.get(`/${id}/stats?t=${Date.now()}`);
+export const getEndpointStats = (id, startDate, endDate, limit) => {
+    return api.get(`/${id}/stats`, {
+        params: {
+            start_date: startDate,
+            end_date: endDate,
+            limit: limit
+        }
+    });
 };

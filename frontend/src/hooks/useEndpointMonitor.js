@@ -10,7 +10,7 @@ export default function useEndpointMonitor(endpoints) {
 
             const promises = endpoints.map(async (ep) => {
                 try {
-                    const statsRes = await getEndpointStats(ep.id);
+                    const statsRes = await getEndpointStats(ep.id, null, null, 1);
                     const responseData = statsRes.data;
                     const history = responseData.history;
 

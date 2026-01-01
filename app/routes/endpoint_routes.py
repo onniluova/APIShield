@@ -73,7 +73,12 @@ def get_endpoint_stats(current_user, id):
     if not endpoint or endpoint['user_id'] != user_id:
          return jsonify({"error": "Endpoint not found or unauthorized"}), 403
 
-    history = CheckModel.get_recent_checks(id, limit=20)
+    start_date = request.args.get('start_date') 
+    end_date = request.args.get('end_date')
+    limit = request.args.get('limit', default=20, type=int)
+
+    history = CheckModel.get_recent_checks(id, limit=limit, start_date=start_date, end_date=end_date)
+
     uptime = CheckModel.get_uptime_stats(id)
 
     response = make_response(jsonify({
