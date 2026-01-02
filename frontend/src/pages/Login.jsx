@@ -83,7 +83,7 @@ const Login = () => {
     return (
         <div 
             onMouseMove={handleMouseMove}
-            className="min-h-screen dark:bg-slate-800 dark:bg-none bg-gradient-to-br from-emerald-700 to-violet-700 flex items-center justify-center p-4 relative overflow-hidden"
+            className="min-h-screen dark:bg-slate-900 dark:bg-none bg-gradient-to-br from-emerald-700 to-violet-700 flex items-center justify-center p-4 relative overflow-hidden"
         >
             <button 
                 onClick={toggleTheme}
