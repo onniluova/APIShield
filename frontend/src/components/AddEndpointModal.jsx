@@ -45,7 +45,7 @@ export default function AddEndpointModal({ onClose, onSuccess }) {
 
     return (
         <motion.div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4"
             variants={backdropVariants}
             initial="hidden"
             animate="visible"
@@ -53,7 +53,7 @@ export default function AddEndpointModal({ onClose, onSuccess }) {
             onClick={onClose}
         >
             <motion.div 
-                className="relative w-full max-w-md bg-gradient-to-br from-emerald-900/90 to-violet-900/90 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-2xl"
+                className="relative w-full dark:bg-slate-900/50 dark:bg-none max-w-md bg-gradient-to-br from-emerald-900/45 to-violet-900/45 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-2xl"
                 variants={modalVariants}
                 onClick={(e) => e.stopPropagation()}
             >
