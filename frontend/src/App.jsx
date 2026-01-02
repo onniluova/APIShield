@@ -13,6 +13,7 @@ import Settings from "./pages/Settings"
 
 import ProtectedRoute from "./components/ProtectedRoute"
 import { UserProvider } from './context/userContext'
+import { ThemeProvider } from './context/themeContext'
 import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter(
@@ -30,8 +31,10 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <UserProvider>
-      <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
-      <RouterProvider router={router} />
+      <ThemeProvider>
+        <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </UserProvider>
   )
 }

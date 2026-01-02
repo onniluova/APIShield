@@ -6,6 +6,7 @@ import Input from '../components/Input';
 import { RotateLoader } from 'react-spinners';
 import { loginAuth, registerAuth } from '../services/authService';
 import { UserContext } from '../context/userContext';
+import { useTheme } from '../context/themeContext';
 import toast from 'react-hot-toast';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 
@@ -14,6 +15,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const { user, setUser } = useContext(UserContext);
+    const { theme, toggleTheme } = useTheme()
     let navigate = useNavigate();
 
     const mouseX = useMotionValue(0);
@@ -81,8 +83,15 @@ const Login = () => {
     return (
         <div 
             onMouseMove={handleMouseMove}
-            className="min-h-screen dark:bg-slate-700 bg-gradient-to-br from-emerald-700 to-violet-700 flex items-center justify-center p-4 relative overflow-hidden"
+            className="min-h-screen dark:bg-slate-800 dark:bg-none bg-gradient-to-br from-emerald-700 to-violet-700 flex items-center justify-center p-4 relative overflow-hidden"
         >
+            <button 
+                onClick={toggleTheme}
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all border border-white/10 text-white shadow-lg cursor-pointer z-50"
+                aria-label="Toggle Dark Mode"
+            >
+                {theme === 'dark' ? <p>Dark</p> : <p>Light</p>}
+            </button>
             <motion.div 
                 style={{
                     maskImage: useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, black, transparent)`,
