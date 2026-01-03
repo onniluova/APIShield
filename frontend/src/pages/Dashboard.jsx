@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import AddEndpointModal from "../components/AddEndpointModal";
 import DetailedAnalyticsModal from "../components/DetailedAnalyticsModal";
 import { AnimatePresence } from "framer-motion";
-import { useTheme } from '../context/themeContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
     const [onAddEndpoint, setOnAddEndpoint] = useState(false);

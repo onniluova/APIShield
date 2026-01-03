@@ -5,8 +5,8 @@ import Header from '../components/Header';
 import Input from '../components/Input';
 import { BeatLoader } from 'react-spinners';
 import { loginAuth, registerAuth } from '../services/authService';
-import { UserContext } from '../context/userContext';
-import { useTheme } from '../context/themeContext';
+import { UserContext } from '../context/UserContext';
+import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 

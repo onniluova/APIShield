@@ -12,8 +12,8 @@ import Dashboard from "./pages/Dashboard"
 import Settings from "./pages/Settings"
 
 import ProtectedRoute from "./components/ProtectedRoute"
-import { UserProvider } from './context/userContext'
-import { ThemeProvider } from './context/themeContext'
+import { UserProvider } from './context/UserContext'
+import { ThemeProvider } from './context/ThemeContext'
 import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter(
@@ -23,6 +23,7 @@ const router = createBrowserRouter(
       
       <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
       </Route>
     </>
   )

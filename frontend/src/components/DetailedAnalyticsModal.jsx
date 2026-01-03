@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import Header from "./Header";
 import { getEndpointStats } from "../services/endpointService";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { useTheme } from '../context/themeContext';
+import { useTheme } from '../context/ThemeContext';
 
 const backdropVariants = {
     hidden: { opacity: 0 },

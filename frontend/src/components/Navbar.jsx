@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { HiOutlineLogout, HiCog, HiHome } from "react-icons/hi";
 import toast from 'react-hot-toast';
 import { useState, useContext } from 'react';
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/UserContext";
 
 export default function Navbar({ children, className = "", ...props }) {
     let navigate = useNavigate();
@@ -17,7 +17,8 @@ export default function Navbar({ children, className = "", ...props }) {
     };
 
     const handleSettingsClick = async () => {
-        toast.error("Page is under construction")
+        navigate("/settings")
+        toast.success("Page is under construction.")
     };
 
     const handleDashboardClick = async () => {
