@@ -13,3 +13,7 @@ export const registerAuth = async (username, password) => {
         password
     });
 }
+
+export const googleAuth = (token) => {
+    return api.post(`/google`, { token }); 
+};

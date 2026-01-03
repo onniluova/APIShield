@@ -4,11 +4,12 @@ import Button from '../components/Button';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import { BeatLoader } from 'react-spinners';
-import { loginAuth, registerAuth } from '../services/authService';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
+import { useGoogleLogin } from '@react-oauth/google';
+import { loginAuth, registerAuth, googleAuth } from '../services/authService';
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -17,6 +18,35 @@ const Login = () => {
     const { user, setUser } = useContext(UserContext);
     const { theme, toggleTheme } = useTheme()
     let navigate = useNavigate();
+
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            setLoading(true);
+            try {
+                const response = await googleAuth(tokenResponse.access_token);
+                
+                const { token, role, user_id, username } = response.data;
+
+                localStorage.setItem("authToken", token);
+                localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role }));
+                setUser({ user_id, username, role });
+                
+                toast.success(`Welcome ${username}`);
+                navigate("/dashboard");
+            } catch (error) {
+                console.error("Google Login Error:", error);
+                toast.error("Google authentication failed.");
+            } finally {
+                setLoading(false);
+            }
+        },
+        onError: () => toast.error("Google Login Failed"),
+    });
+
+    const handleGoogleClick = () => {
+        toast.dismiss();
+        loginWithGoogle();
+    };
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
@@ -41,12 +71,8 @@ const Login = () => {
 
             localStorage.setItem("authToken", token);
             localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role }));
-            
-            const userData = {
-                user_id: user_id,
-                username: username,
-                role: role
-            };
+
+            setUser({ user_id, username, role });
 
             toast.success(`Welcome back, ${username}`);
             navigate("/dashboard");
@@ -144,12 +170,6 @@ const Login = () => {
                                 "Sign In"
                             )}
                         </Button>
-                        
-                        <div className="relative flex py-2 items-center">
-                            <div className="flex-grow border-t border-gray-200"></div>
-                            <span className="flex-shrink mx-4 text-white text-xs">OR</span>
-                            <div className="flex-grow border-t border-gray-200"></div>
-                        </div>
 
                         <Button onClick={handleRegisterClick} disabled={loading} 
                             className="w-full text-white border border-gray-200 hover:bg-slate-200 hover:text-gray-500 shadow-none"
@@ -159,6 +179,24 @@ const Login = () => {
                             ) : (
                                 "Create Account"
                             )}
+                        </Button>
+                        
+                        <div className="relative flex py-2 items-center">
+                            <div className="flex-grow border-t border-gray-200"></div>
+                            <span className="flex-shrink mx-4 text-white text-xs">OR</span>
+                            <div className="flex-grow border-t border-gray-200"></div>
+                        </div>
+
+                        <Button 
+                            onClick={handleGoogleClick}
+                            className="w-full bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 flex items-center justify-center gap-2"
+                        >
+                            <img 
+                                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                                alt="Google" 
+                                className="w-5 h-5" 
+                            />
+                            <span>Sign in with Google</span>
                         </Button>
                     </div>
                 </div>

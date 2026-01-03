@@ -5,6 +5,10 @@ from app.auth import tokenRequired
 from werkzeug.security import check_password_hash
 from app.auth import createToken
 from zxcvbn import zxcvbn
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import os
+import requests
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -83,3 +87,42 @@ def login():
             }), 200
     
     return jsonify({"error": "Invalid username or password"}), 401
+
+@auth_bp.route('/google', methods=['POST'])
+def google_login():
+    data = request.get_json()
+    access_token = data.get('token')
+
+    if not access_token:
+        return jsonify({"error": "Missing token"}), 400
+
+    try:
+        google_response = requests.get(
+            'https://www.googleapis.com/oauth2/v3/userinfo',
+            headers={'Authorization': f'Bearer {access_token}'}
+        )
+        
+        if google_response.status_code != 200:
+             return jsonify({"error": "Invalid Google Token"}), 401
+             
+        user_info = google_response.json()
+
+        google_id = user_info['sub']
+        email = user_info.get('email')
+        name = user_info.get('name')
+
+        user = AuthModel.get_or_create_google_user(google_id, email, name)
+
+        app_token = createToken(user['id'], user['role'])
+
+        return jsonify({
+            "message": "Login successful",
+            "token": app_token,
+            "role": user['role'],
+            "user_id": user['id'],
+            "username": user['username']
+        }), 200
+
+    except Exception as e:
+        print(f"Google Login Error: {str(e)}")
+        return jsonify({"error": "Internal Server Error"}), 500
