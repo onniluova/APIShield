@@ -59,15 +59,7 @@ def login():
     u_name = data.get('username')
     u_pass = data.get('password')
 
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    query = ("SELECT id, password, role FROM users WHERE username = %s;")
-    cur.execute(query, (u_name,))
-    user = cur.fetchone()
-
-    cur.close()
-    conn.close()
+    user = AuthModel.login(u_name, u_pass)
 
     if user:
         user_id = user[0]

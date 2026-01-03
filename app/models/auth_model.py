@@ -23,6 +23,24 @@ class AuthModel:
             if conn: conn.close()
     
     @staticmethod
+    def login(u_name, u_pass):
+        conn = None
+        cur = None
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+
+            query = ("SELECT id, password, role FROM users WHERE username = %s;")
+            cur.execute(query, (u_name,))
+            user = cur.fetchone()
+
+            return user
+        finally:
+            cur.close()
+            conn.close()
+
+    
+    @staticmethod
     def create_user(u_name, u_pass):
         conn = None
         cur = None
