@@ -1,4 +1,4 @@
-![wmremove-transformed](https://github.com/user-attachments/assets/2f7ecd80-6968-4b18-ae82-2c3a6b59fe2b)
+<img width="1024" height="434" alt="unnamed2-Photoroom" src="https://github.com/user-attachments/assets/dc7c038a-71cd-43cf-9296-25ad35064d78" />
 
 Vahti is a custom API monitoring tool designed to track endpoint availability and performance. Unlike basic uptime monitors, it includes a custom latency anomaly detection engine that flags endpoints performing significantly worse than their historical average.
 
@@ -6,7 +6,7 @@ This project was built to demonstrate a full production pipeline: from a Python 
 
 ## Live Demo
 
-**URL:** https://vahti-web.vercel.app
+# **URL:** https://vahti-web.vercel.app
 
 > **Note:** The backend is hosted on Render's free tier. The server spins down after inactivity, so the first request may take 30-50 seconds to process.
 
@@ -51,86 +51,9 @@ The project is managed as a Mono-repo to streamline development.
     │   └── /services   # Axios API configurations
 ```
 
-## Setup Instructions
-
-### 1. Prerequisites
-
-* Python 3.11 or newer
-* Node.js & npm
-* PostgreSQL (Local service or Docker)
-
-### 2. Backend Setup
-
-```
-# Clone the repository
-git clone [https://github.com/onniluova/Vahti.git](https://github.com/onniluova/Vahti.git)
-cd Vahti
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-Create a `.env` file in the root directory with the following variables:
-
-```
-DB_NAME=vahti
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_HOST=localhost
-SECRET_KEY=your_secret_key
-```
-
-Run the server:
-
-```
-python run.py
-# Server runs at http://localhost:5000
-```
-
-### 3. Frontend Setup
-
-Open a new terminal session:
-
-```
-cd frontend
-npm install
-npm run dev
-# Client runs at http://localhost:5173
-```
-
 ## Database Schema
 
-The project uses a relational schema with cascading deletes to ensure data integrity. Run the following SQL commands to initialize the tables:
-
-```
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    role VARCHAR(20) DEFAULT 'user'
-);
-
-CREATE TABLE endpoints (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    url TEXT NOT NULL,
-    name VARCHAR(100)
-);
-
-CREATE TABLE checks (
-    id SERIAL PRIMARY KEY,
-    endpoint_id INTEGER REFERENCES endpoints(id) ON DELETE CASCADE,
-    status_code INTEGER,
-    latency_ms INTEGER,
-    is_up BOOLEAN,
-    checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+<img width="500" height="210" alt="image" src="https://github.com/user-attachments/assets/b1276e4a-e6ea-441f-a402-06cb6b268608" />
 
 ## Roadmap
 
@@ -143,6 +66,7 @@ CREATE TABLE checks (
 * [ ] Implement settings menu.
 * [ ] Implement profile page.
 * [ ] Administration tools for user and endpoint monitoring.
+
 
 
 
