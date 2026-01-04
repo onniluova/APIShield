@@ -18,7 +18,8 @@ This project was built to demonstrate a full production pipeline: from a Python 
 * **Security:** JWT Authentication, zxcvbn (password strength estimation), BCrypt hashing.
 * **DevOps:** Render (Backend), Vercel (Frontend), Git.
 
-<img width="1392" height="862" alt="image" src="https://github.com/user-attachments/assets/94da953c-7b07-4864-addf-47fe729fc9f5" />
+# User interface
+<img width="1689" height="1005" alt="image" src="https://github.com/user-attachments/assets/98091027-79d6-498c-8ed7-906ea75e7c0f" />
 
 ## Architeture Diagram
 ![ArchitectureDiagram](https://github.com/user-attachments/assets/7619d905-2358-479e-b0be-d55930846c3c)
@@ -83,6 +84,7 @@ The project is managed as a Mono-repo to streamline development.
 * [x] Add timeline selection to charts.
 * [x] Implement settings menu.
 * [ ] Administration tools for user and endpoint monitoring.
+
 
 
 
