@@ -4,9 +4,10 @@ import os
 import jwt
 from functools import wraps
 from flask import request, jsonify
+import random
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret')
-REFRESH_SECRET_KEY = os.getenv('REFRESH_SECRET_KEY')
+REFRESH_SECRET_KEY = os.getenv('REFRESH_SECRET_KEY', 'dev-refresh-secret')
 
 def create_access_token(user_id, role):
     payload = {
@@ -22,7 +23,8 @@ def create_refresh_token(user_id):
     payload = {
         'user_id': user_id,
         'exp': datetime.now(timezone.utc) + timedelta(days=7),
-        'type': 'refresh'
+        'type': 'refresh',
+        'jti': os.urandom(16).hex()
     }
     return jwt.encode(payload, REFRESH_SECRET_KEY, algorithm='HS256')
 

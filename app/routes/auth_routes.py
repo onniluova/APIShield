@@ -132,13 +132,20 @@ def logout():
     
     if refresh_token:
         try:
-            payload = jwt.decode(refresh_token, os.getenv('REFRESH_SECRET_KEY', os.getenv('SECRET_KEY')), algorithms=['HS256'])
-            AuthModel.clear_refresh_token(payload['user_id'])
-        except:
+            secret = os.getenv('REFRESH_SECRET_KEY', 'dev-refresh-secret')
+            payload = jwt.decode(refresh_token, secret, algorithms=['HS256'])
+            
+            user_id = payload.get('user_id')
+            if user_id:
+                AuthModel.clear_refresh_token(user_id)
+                print(f"Token cleared for user {user_id}")
+        except Exception as e:
+            print(f"Logout error: {e}")
             pass
 
     response = make_response(jsonify({"message": "Logged out successfully"}))
-    response.set_cookie('refreshToken', '', expires=0)
+    
+    response.set_cookie('refreshToken', '', expires=0, httponly=True, samesite='None' if is_prod else 'Lax', secure=is_prod)
     return response, 200
 
 @auth_bp.route('/auth/<int:id>/delete', methods=['DELETE'])

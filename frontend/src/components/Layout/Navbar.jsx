@@ -4,16 +4,24 @@ import { HiOutlineLogout, HiCog, HiHome } from "react-icons/hi";
 import toast from 'react-hot-toast';
 import { useContext } from 'react';
 import { UserContext } from "../../context/UserContext";
+import { logoutAuth } from "../../services/authService";
 
 export default function Navbar({ children, className = "", ...props }) {
     let navigate = useNavigate();
     const { user, setUser } = useContext(UserContext);
 
     const handleLogoutClick = async () => {
-        localStorage.clear()
-        toast.success("Logged out succesfully.")
-        setUser(null);
-        navigate("/");
+        try {
+            await logoutAuth();
+        } catch (error) {
+            console.error("Logout request failed", error);
+        } finally {
+            localStorage.clear();
+            setUser(null);
+            
+            toast.success("Logged out successfully.");
+            navigate("/");
+        }
     };
 
     const handleSettingsClick = async () => {
