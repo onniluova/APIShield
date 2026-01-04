@@ -62,6 +62,29 @@ class AuthModel:
         finally:
             if cur: cur.close()
             if conn: conn.close()
+
+    @staticmethod
+    def delete_user(id):
+        conn = None
+        cur = None
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+
+            query = ("DELETE FROM users where id = %s")
+            cur.execute(query, (id,))
+
+            rows_deleted = cur.rowcount
+
+            conn.commit()
+            return rows_deleted
+        except Exception as e:
+            print(f"Error deleting user: {e}")
+            if conn: conn.rollback()
+            raise e
+        finally:
+            if cur: cur.close()
+            if conn: conn.close()
     
     @staticmethod
     def get_or_create_google_user(google_id, email, name):

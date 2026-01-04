@@ -10,7 +10,7 @@ import requests
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/users', methods=['GET'])
+@auth_bp.route('/auth/user', methods=['GET'])
 @tokenRequired
 def get_users(current_user):
     try:
@@ -24,7 +24,7 @@ def get_users(current_user):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@auth_bp.route('/register', methods=['POST'])
+@auth_bp.route('/auth/register', methods=['POST'])
 def def_createUser():
     data = request.get_json()
 
@@ -52,7 +52,7 @@ def def_createUser():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/auth/login', methods=['POST'])
 def login():
     data = request.get_json()
 
@@ -78,7 +78,22 @@ def login():
     
     return jsonify({"error": "Invalid username or password"}), 401
 
-@auth_bp.route('/google', methods=['POST'])
+@auth_bp.route('/auth/<int:id>/delete', methods=['DELETE'])
+@tokenRequired
+def delete(current_user):
+    id = current_user["id"]
+
+    if not id:
+        return jsonify({"error": "User not found."}), 404
+
+    deleted_user = AuthModel.delete_user(id)
+
+    return jsonify({
+        "message": "Delete succesful",
+        "user": deleted_user
+    }), 200
+
+@auth_bp.route('/auth/google', methods=['POST'])
 def google_login():
     data = request.get_json()
     access_token = data.get('token')
