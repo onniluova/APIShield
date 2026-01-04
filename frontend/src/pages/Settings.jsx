@@ -3,6 +3,7 @@ import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
+import Button from "../components/Button"
 import toast from 'react-hot-toast';
 
 import ProfileTab from '../components/Settings/ProfileTab';
@@ -18,7 +19,11 @@ const Settings = () => {
         checkInterval: 5,
         requestTimeout: 10,
         emailAlerts: true,
-        autoRefreshDashboard: true
+        autoRefreshDashboard: true,
+        maxRetries: 3,
+        ignoreSSL: false,
+        latencyWarning: 500,
+        keepHistoryDays: 30
     });
 
     const [loading, setLoading] = useState(false);
@@ -40,6 +45,7 @@ const Settings = () => {
             });
         }, 800);
     };
+    
     const [activeTab, setActiveTab] = useState('profile');
 
     const tabs = [
@@ -57,63 +63,79 @@ const Settings = () => {
                 <Navbar />
             </div>
 
-            <div className="flex-grow flex items-center justify-center w-full px-4 z-10 relative">
+            <div className="flex-grow flex items-center justify-center w-full px-4 py-6 z-10 relative">
                 
-                <div className="w-full max-w-lg flex flex-col gap-4">
-                    
-                    <div className="flex flex-col gap-1 mb-2 text-center sm:text-left">
-                        <Header className='text-white font-bold text-3xl tracking-tight'>Settings (UI Preview)</Header>
-                        <p className="text-white/60 text-sm">Manage your account preferences.</p>
-                    </div>
+                <div className="w-full max-w-2xl h-[650px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden flex flex-col">
 
-                    <div className="flex justify-center sm:justify-start overflow-x-auto gap-2 pb-2 scrollbar-hide">
+                    <div className="p-6 border-b border-white/10 bg-black/10 flex flex-col items-center text-center flex-shrink-0">
+                        <Header className='text-white font-bold text-2xl sm:text-3xl tracking-tight'>Settings (UI Preview)</Header>
+                        <p className="text-white/60 text-sm mt-1">Manage your account preferences and configurations.</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 sm:grid-cols-4 w-full border-b border-white/10 flex-shrink-0" role="tablist">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
+                                role="tab"
+                                aria-selected={activeTab === tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
-                                    activeTab === tab.id 
-                                    ? 'bg-white text-emerald-900 shadow-lg scale-105' 
-                                    : 'bg-white/10 text-white/70 hover:bg-white/20'
-                                }`}
+                                className={`
+                                    py-4 text-sm font-medium transition-colors duration-200 outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-400
+                                    ${activeTab === tab.id 
+                                        ? 'bg-white/10 text-white border-b-2 border-emerald-400' 
+                                        : 'text-white/60 hover:bg-white/5 hover:text-white'
+                                    }
+                                `}
                             >
                                 {tab.label}
                             </button>
                         ))}
                     </div>
 
-                    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl p-6 h-[500px] flex flex-col justify-between">
+                    <div className="p-6 flex-grow overflow-y-auto custom-scrollbar relative">
                         
                         {activeTab === 'profile' && (
-                            <ProfileTab
-                            currentUser={user}
-                            ></ProfileTab>
+                            <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                                <ProfileTab currentUser={user} />
+                            </div>
                         )}
 
                         {activeTab === 'monitoring' && (
-                            <MonitoringTab
-                            settings={settings}
-                            handleChange={handleChange}
-                            handleSave={handleSave}
-                            loading={loading}
-                            ></MonitoringTab>
+                            <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                                <MonitoringTab
+                                    settings={settings}
+                                    handleChange={handleChange}
+                                />
+                            </div>
                         )}
 
                         {activeTab === 'app' && (
-                            <AppTab
-                            settings={settings}
-                            theme={theme}
-                            toggleTheme={toggleTheme}
-                            ></AppTab>
+                            <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                                <AppTab
+                                    settings={settings}
+                                    theme={theme}
+                                    toggleTheme={toggleTheme}
+                                />
+                            </div>
                         )}
 
                         {activeTab === 'account' && (
-                            <AccountTab
-                            user={user}
-                            ></AccountTab>
+                            <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                                <AccountTab user={user} />
+                            </div>
                         )}
-
                     </div>
+
+                    <div className="p-4 border-t border-white/10 bg-black/20 flex justify-end flex-shrink-0">
+                        <Button 
+                            onClick={handleSave}
+                            disabled={loading}
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                        >
+                            {loading ? 'Saving...' : 'Save Changes'}
+                        </Button>
+                    </div>
+
                 </div>
             </div>
         </div>

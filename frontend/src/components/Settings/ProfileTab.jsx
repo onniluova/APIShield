@@ -1,4 +1,6 @@
-export default function ProfileTab({ currentUser }) {
+import Button from "../../components/Button"
+
+export default function ProfileTab({ currentUser, handleSave, loading }) {
     return (
         <div className="flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-300">
             <h2 className="text-white font-semibold text-lg border-b border-white/10 pb-2">Profile Information</h2>

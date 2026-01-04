@@ -18,7 +18,9 @@ export default function Navbar({ children, className = "", ...props }) {
 
     const handleSettingsClick = async () => {
         navigate("/settings")
-        toast.success("Page is under construction.")
+        toast('This is a UI preview. Settings are not saved to the database.', {
+                icon: '🚧',
+            });
     };
 
     const handleDashboardClick = async () => {
