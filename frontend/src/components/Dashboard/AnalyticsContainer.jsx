@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "../Header";
+import Header from "../ui/Title";
 import { getEndpoints } from "../../services/endpointService";
 import AnalyticsCard from "./AnalyticsCard";
 import useEndpointMonitor from "../../hooks/useEndpointMonitor";

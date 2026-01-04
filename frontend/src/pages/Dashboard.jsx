@@ -1,10 +1,12 @@
-import Navbar from "../components/Navbar";
-import Button from "../components/Button";
+import Navbar from "../components/Layout/Navbar";
+import Button from "../components/ui/Button";
 import Analytics from "../components/Dashboard/AnalyticsContainer";
-import Grid from "../components/Grid";
-import { useState, useEffect } from 'react';
+import BackgroundGrid from "../components/ui/BackgroundGrid"; 
+
 import AddEndpointModal from "../components/Dashboard/AddEndpointModal";
 import DetailedAnalyticsModal from "../components/Dashboard/DetailedAnalyticsModal";
+
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from "framer-motion";
 import { useTheme } from '../context/ThemeContext';
 
@@ -31,7 +33,7 @@ const Dashboard = () => {
             className="relative dark:bg-none min-h-screen bg-gradient-to-br from-emerald-700 to-violet-700 dark:bg-slate-900 flex flex-col p-4 gap-5 overflow-hidden"
         >
             <div className="absolute inset-0 z-0">
-                <Grid></Grid>
+                <BackgroundGrid></BackgroundGrid>
             </div>
 
             <Button 

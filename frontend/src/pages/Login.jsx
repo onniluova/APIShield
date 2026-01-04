@@ -1,8 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from "react-router";
-import Button from '../components/Button';
-import Header from '../components/Header';
-import Input from '../components/Input';
 import { BeatLoader } from 'react-spinners';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
@@ -10,6 +7,10 @@ import toast from 'react-hot-toast';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 import { loginAuth, registerAuth, googleAuth } from '../services/authService';
+
+import Button from '../components/ui/Button';
+import Title from '../components/ui/Title';
+import Input from '../components/ui/Input';
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -148,9 +149,9 @@ const Login = () => {
                     <p className="text-white text-sm">
                         Vahti
                     </p>
-                    <Header className="text-4xl font-bold text-white mb-2">
+                    <Title className="text-4xl font-bold text-white mb-2">
                         Login
-                    </Header>
+                    </Title>
                 </div>
 
                 <div className="flex flex-col gap-4">

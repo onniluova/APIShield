@@ -2,16 +2,17 @@ import { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
 import { saveSettings } from '../services/authService';
-import Grid from '../components/Grid.jsx';
-import Header from "../components/Header"
-import Navbar from "../components/Navbar"
-import Button from "../components/Button"
 import toast from 'react-hot-toast';
 
+import BackgroundGrid from '../components/ui/BackgroundGrid';
+import Button from '../components/ui/Button';
+import Title from '../components/ui/Title';
+
+import Navbar from '../components/Layout/Navbar';
 import ProfileTab from '../components/Settings/ProfileTab';
 import MonitoringTab from '../components/Settings/MonitoringTab';
 import AppTab from '../components/Settings/AppTab';
-import AccountTab from '../components/Settings/AccountTab.jsx';
+import AccountTab from '../components/Settings/AccountTab';
 
 const Settings = () => {
     const { user, setUser } = useContext(UserContext);
@@ -77,7 +78,7 @@ const Settings = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-emerald-700 to-violet-700 dark:bg-none dark:bg-slate-900">
-            <Grid></Grid>
+            <BackgroundGrid></BackgroundGrid>
 
             <div className="p-4 z-20">
                 <Navbar />
@@ -88,7 +89,7 @@ const Settings = () => {
                 <div className="w-full max-w-2xl h-[650px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden flex flex-col">
 
                     <div className="p-6 border-b border-white/10 bg-black/10 flex flex-col items-center text-center flex-shrink-0">
-                        <Header className='text-white font-bold text-2xl sm:text-3xl tracking-tight'>Settings (UI Preview)</Header>
+                        <Title className='text-white font-bold text-2xl sm:text-3xl tracking-tight'>Settings (UI Preview)</Title>
                         <p className="text-white/60 text-sm mt-1">Manage your account preferences and configurations.</p>
                     </div>
                     

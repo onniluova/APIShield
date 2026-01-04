@@ -1,4 +1,4 @@
-import Button from "../Button"
+import Button from "../ui/Button.jsx"
 import { useState } from 'react';
 import { deleteUser } from '../../services/authService.js';
 import toast from 'react-hot-toast';

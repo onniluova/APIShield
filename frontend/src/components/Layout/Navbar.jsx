@@ -1,9 +1,9 @@
-import Button from "./Button"
+import Button from "../ui/Button";
 import { useNavigate } from "react-router";
 import { HiOutlineLogout, HiCog, HiHome } from "react-icons/hi";
 import toast from 'react-hot-toast';
-import { useState, useContext } from 'react';
-import { UserContext } from "../context/UserContext";
+import { useContext } from 'react';
+import { UserContext } from "../../context/UserContext";
 
 export default function Navbar({ children, className = "", ...props }) {
     let navigate = useNavigate();

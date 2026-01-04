@@ -1,4 +1,4 @@
-import Button from "../../components/Button"
+import Button from "../ui/Button"
 
 export default function ProfileTab({ currentUser, handleSave, loading }) {
     return (

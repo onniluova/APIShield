@@ -1,5 +1,5 @@
-import Input from "../../components/Input"
-import Button from "../../components/Button"
+import Input from "../ui/Input"
+import Button from "../ui/Button"
 
 const MonitoringTab = ({ settings, handleChange, handleSave, loading }) => {
     return (
