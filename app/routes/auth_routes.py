@@ -1,14 +1,18 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from app.models.auth_model import AuthModel
 from app.db_conn import get_db_connection
 from app.auth import tokenRequired
 from werkzeug.security import check_password_hash
-from app.auth import createToken
+from app.auth import create_access_token
 from zxcvbn import zxcvbn
 import os
 import requests
+from app.auth import tokenRequired, create_access_token, create_refresh_token 
+import jwt
 
 auth_bp = Blueprint('auth', __name__)
+
+is_prod = os.getenv('FLASK_ENV') == 'production'
 
 @auth_bp.route('/auth/user', methods=['GET'])
 @tokenRequired
@@ -68,17 +72,74 @@ def login():
         settings = user[3]
 
         if check_password_hash(stored_hash, u_pass):
-            token = createToken(user_id, role)
+            access_token = create_access_token(user_id, role)
+            refresh_token = create_refresh_token(user_id)
 
-            return jsonify({
+            AuthModel.save_refresh_token(user_id, refresh_token)
+
+            response = make_response(jsonify({
                 "message": "Login successful",
-                "token": token,
+                "accessToken": access_token,
                 "role": role,
                 "user_id": user_id,
                 'settings': settings
-            }), 200
+            }))
+
+            response.set_cookie(
+                'refreshToken', 
+                refresh_token, 
+                httponly=True,
+                secure=is_prod,
+                samesite='None' if is_prod else 'Lax',
+                max_age=7 * 24 * 60 * 60 
+            )
+
+            return response, 200
     
     return jsonify({"error": "Invalid username or password"}), 401
+
+@auth_bp.route('/auth/refresh', methods=['POST'])
+def refresh_token():
+    refresh_token = request.cookies.get('refreshToken')
+
+    if not refresh_token:
+        return jsonify({"error": "Refresh token missing"}), 401
+
+    try:
+        payload = jwt.decode(refresh_token, os.getenv('REFRESH_SECRET_KEY', os.getenv('SECRET_KEY')), algorithms=['HS256'])
+        user_id = payload['user_id']
+
+        stored_token = AuthModel.get_stored_refresh_token(user_id)
+        if stored_token != refresh_token:
+            return jsonify({"error": "Invalid refresh token"}), 401
+
+        role = "user"
+
+        new_access_token = create_access_token(user_id, role)
+
+        return jsonify({
+            "accessToken": new_access_token
+        }), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Refresh token expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Invalid token"}), 401
+
+@auth_bp.route('/auth/logout', methods=['POST'])
+def logout():
+    refresh_token = request.cookies.get('refreshToken')
+    
+    if refresh_token:
+        try:
+            payload = jwt.decode(refresh_token, os.getenv('REFRESH_SECRET_KEY', os.getenv('SECRET_KEY')), algorithms=['HS256'])
+            AuthModel.clear_refresh_token(payload['user_id'])
+        except:
+            pass
+
+    response = make_response(jsonify({"message": "Logged out successfully"}))
+    response.set_cookie('refreshToken', '', expires=0)
+    return response, 200
 
 @auth_bp.route('/auth/<int:id>/delete', methods=['DELETE'])
 @tokenRequired
@@ -138,16 +199,29 @@ def google_login():
 
         user = AuthModel.get_or_create_google_user(google_id, email, name)
 
-        app_token = createToken(user['id'], user['role'])
+        access_token = create_access_token(user['id'], user['role'])
+        refresh_token = create_refresh_token(user['id'])
+        
+        AuthModel.save_refresh_token(user['id'], refresh_token)
 
-        return jsonify({
+        response = make_response(jsonify({
             "message": "Login successful",
-            "token": app_token,
+            "accessToken": access_token,
             "role": user['role'],
             "user_id": user['id'],
             "username": user['username'],
             "settings": user.get('settings', {})
-        }), 200
+        }))
+
+        response.set_cookie(
+            'refreshToken', 
+            refresh_token, 
+            httponly=True, 
+            secure=is_prod,
+            samesite='None' if is_prod else 'Lax',
+            max_age=7 * 24 * 60 * 60
+        )
+        return response, 200
 
     except Exception as e:
         print(f"Google Login Error: {str(e)}")

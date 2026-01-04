@@ -6,8 +6,9 @@ from functools import wraps
 from flask import request, jsonify
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret')
+REFRESH_SECRET_KEY = os.getenv('REFRESH_SECRET_KEY')
 
-def createToken(user_id, role):
+def create_access_token(user_id, role):
     payload = {
         'user_id': user_id,
         'role': role,
@@ -16,6 +17,14 @@ def createToken(user_id, role):
 
     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
     return token
+
+def create_refresh_token(user_id):
+    payload = {
+        'user_id': user_id,
+        'exp': datetime.now(timezone.utc) + timedelta(days=7),
+        'type': 'refresh'
+    }
+    return jwt.encode(payload, REFRESH_SECRET_KEY, algorithm='HS256')
 
 def tokenRequired(f):
     @wraps(f)

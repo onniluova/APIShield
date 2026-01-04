@@ -152,3 +152,31 @@ class AuthModel:
         finally:
             if cur: cur.close()
             if conn: conn.close()
+
+    @staticmethod
+    def save_refresh_token(user_id, refresh_token):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE users SET refresh_token = %s WHERE id = %s", (refresh_token, user_id))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    @staticmethod
+    def get_stored_refresh_token(user_id):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT refresh_token FROM users WHERE id = %s", (user_id,))
+        token = cur.fetchone()
+        cur.close()
+        conn.close()
+        return token[0] if token else None
+        
+    @staticmethod
+    def clear_refresh_token(user_id):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE users SET refresh_token = NULL WHERE id = %s", (user_id,))
+        conn.commit()
+        cur.close()
+        conn.close()

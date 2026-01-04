@@ -25,10 +25,10 @@ const Login = () => {
             setLoading(true);
             try {
                 const response = await googleAuth(tokenResponse.access_token);
-                
-                const { token, role, user_id, username, settings } = response.data;
 
-                localStorage.setItem("authToken", token);
+                const { accessToken, role, user_id, username, settings } = response.data;
+
+                localStorage.setItem("authToken", accessToken);
                 localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role, settings }));
                 setUser({ user_id, username, role, settings });
                 
@@ -51,9 +51,9 @@ const Login = () => {
 
         try {
             const response = await loginAuth(username, password);
-            const { token, role, user_id, settings } = response.data;
+            const { accessToken, role, user_id, settings } = response.data;
 
-            localStorage.setItem("authToken", token);
+            localStorage.setItem("authToken", accessToken); 
             localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role, settings }));
 
             setUser({ user_id, username, role, settings });
@@ -105,6 +105,15 @@ const Login = () => {
                     "Registration failed. Please try again.";
 
                 const suggestions = data?.error?.suggestions || [];
+                
+                if (typeof errorContent === 'object' && errorContent !== null) {
+                    feedback = errorContent.warning || "Password is too weak.";
+                    suggestions = errorContent.suggestions || [];
+                } else if (typeof errorContent === 'string') {
+                    feedback = errorContent;
+                } else if (data?.message) {
+                    feedback = data.message;
+                }
 
                 toast.error(
                     <div className="flex flex-col gap-1">

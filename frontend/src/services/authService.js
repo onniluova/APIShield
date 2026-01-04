@@ -27,3 +27,7 @@ export const saveSettings = (settings) => {
         settings
     );
 };
+
+export const logoutAuth = async () => {
+    return api.post("/auth/logout");
+};
