@@ -92,17 +92,31 @@ const Login = () => {
                 const response = await registerAuth(username, password);
                 toast.success("Account created succesfully!");
             } catch(error) {
-                const feedback = error.response?.data?.error?.warning;
-                const suggestions = error.response?.data?.error?.suggestions;
-
-                console.log(error.data)
+                console.error("Registration Error:", error);
                 
+                const data = error.response?.data;
+
+                const feedback = 
+                    data?.error?.warning ||
+                    data?.error ||
+                    data?.message ||
+                    "Registration failed. Please try again.";
+
+                const suggestions = data?.error?.suggestions || [];
+
                 toast.error(
-                    <div>
-                        {feedback}
-                        {suggestions}
+                    <div className="flex flex-col gap-1">
+                        <span className="font-medium">{feedback}</span>
+                        
+                        {Array.isArray(suggestions) && suggestions.length > 0 && (
+                            <ul className="list-disc pl-4 text-xs opacity-90 mt-1">
+                                {suggestions.map((s, i) => (
+                                    <li key={i}>{s}</li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
-                )
+                , { duration: 5000 });
         } finally {
             setLoading(false);
         }
