@@ -1,9 +1,8 @@
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
-import Button from "../components/Button"
 import toast from 'react-hot-toast';
 
 import ProfileTab from '../components/Settings/ProfileTab';
@@ -109,7 +108,9 @@ const Settings = () => {
                         )}
 
                         {activeTab === 'account' && (
-                            <AccountTab></AccountTab>
+                            <AccountTab
+                            user={user}
+                            ></AccountTab>
                         )}
 
                     </div>

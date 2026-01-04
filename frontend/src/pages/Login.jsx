@@ -93,12 +93,14 @@ const Login = () => {
                 toast.success("Account created succesfully!");
             } catch(error) {
                 const feedback = error.response?.data?.error?.warning;
+                const suggestions = error.response?.data?.error?.suggestions;
 
                 console.log(error.data)
                 
                 toast.error(
                     <div>
                         {feedback}
+                        {suggestions}
                     </div>
                 )
         } finally {

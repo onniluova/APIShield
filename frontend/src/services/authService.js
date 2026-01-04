@@ -19,5 +19,5 @@ export const googleAuth = (token) => {
 };
 
 export const deleteUser = (user_id) => {
-    return api.post(`/auth/${user_id}/delete`); 
+    return api.delete(`/auth/${user_id}/delete`);
 };

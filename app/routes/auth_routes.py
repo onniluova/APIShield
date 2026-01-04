@@ -80,11 +80,10 @@ def login():
 
 @auth_bp.route('/auth/<int:id>/delete', methods=['DELETE'])
 @tokenRequired
-def delete(current_user):
-    id = current_user["id"]
-
-    if not id:
-        return jsonify({"error": "User not found."}), 404
+def delete(current_user, id):
+    
+    if int(id) != int(current_user["user_id"]):
+        return jsonify({"error": "Unauthorized deletion"}), 403
 
     deleted_user = AuthModel.delete_user(id)
 
