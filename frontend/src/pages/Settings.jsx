@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
 import { saveSettings } from '../services/authService';
+import Grid from '../components/Grid.jsx';
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import Button from "../components/Button"
@@ -76,7 +77,7 @@ const Settings = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-emerald-700 to-violet-700 dark:bg-none dark:bg-slate-900">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+            <Grid></Grid>
 
             <div className="p-4 z-20">
                 <Navbar />
