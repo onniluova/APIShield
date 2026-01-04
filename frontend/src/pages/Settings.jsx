@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
+import { saveSettings } from '../services/authService';
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import Button from "../components/Button"
@@ -12,19 +13,24 @@ import AppTab from '../components/Settings/AppTab';
 import AccountTab from '../components/Settings/AccountTab.jsx';
 
 const Settings = () => {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const { theme, toggleTheme } = useTheme();
     
-    const [settings, setSettings] = useState({
+    const defaultSettings = {
         checkInterval: 5,
         requestTimeout: 10,
-        emailAlerts: true,
+        emailAlerts: false,
         autoRefreshDashboard: true,
         maxRetries: 3,
         ignoreSSL: false,
         latencyWarning: 500,
         keepHistoryDays: 30
-    });
+    };
+
+    const [settings, setSettings] = useState(() => ({
+        ...defaultSettings,
+        ...(user?.settings) || {}
+    }))
 
     const [loading, setLoading] = useState(false);
 
@@ -38,12 +44,25 @@ const Settings = () => {
 
     const handleSave = async () => {
         setLoading(true);
-        setTimeout(() => {
+        toast.dismiss();
+        try {
+            const response = await saveSettings(settings);
+
+            if (response.data?.settings) {
+                setUser(prev => ({
+                    ...prev,
+                    settings: response.data.settings
+                }));
+            }
+            
+            toast.success("Settings updated succesfully.");
+            console.log(user)
+        } catch(err) {
+            toast.error(err?.message);
+
+        } finally {
             setLoading(false);
-            toast('This is a UI preview. Settings were not saved to the database.', {
-                icon: '🚧',
-            });
-        }, 800);
+        }
     };
     
     const [activeTab, setActiveTab] = useState('profile');

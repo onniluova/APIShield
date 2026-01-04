@@ -25,11 +25,11 @@ const Login = () => {
             try {
                 const response = await googleAuth(tokenResponse.access_token);
                 
-                const { token, role, user_id, username } = response.data;
+                const { token, role, user_id, username, settings } = response.data;
 
                 localStorage.setItem("authToken", token);
-                localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role }));
-                setUser({ user_id, username, role });
+                localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role, settings }));
+                setUser({ user_id, username, role, settings });
                 
                 toast.success(`Welcome ${username}`);
                 navigate("/dashboard");
@@ -42,6 +42,30 @@ const Login = () => {
         },
         onError: () => toast.error("Google Login Failed"),
     });
+
+    
+    const handleLoginClick = async () => {
+        toast.dismiss();
+        setLoading(true)
+
+        try {
+            const response = await loginAuth(username, password);
+            const { token, role, user_id, settings } = response.data;
+
+            localStorage.setItem("authToken", token);
+            localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role, settings }));
+
+            setUser({ user_id, username, role, settings });
+
+            toast.success(`Welcome, ${username}`);
+            navigate("/dashboard");
+        } catch(error) {
+            const message = error.response?.data?.message || "Login failed. Please try again.";
+            toast.error(message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleGoogleClick = () => {
         toast.dismiss();
@@ -60,29 +84,6 @@ const Login = () => {
     useEffect(() => {
         localStorage.clear();
     }, []);
-
-    const handleLoginClick = async () => {
-        toast.dismiss();
-        setLoading(true)
-
-        try {
-            const response = await loginAuth(username, password);
-            const { token, role, user_id } = response.data;
-
-            localStorage.setItem("authToken", token);
-            localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role }));
-
-            setUser({ user_id, username, role });
-
-            toast.success(`Welcome back, ${username}`);
-            navigate("/dashboard");
-        } catch(error) {
-            const message = error.response?.data?.message || "Login failed. Please try again.";
-            toast.error(message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleRegisterClick = async () => {
         toast.dismiss();

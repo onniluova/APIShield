@@ -3,6 +3,7 @@ from psycopg2.extras import RealDictCursor
 from werkzeug.security import generate_password_hash
 import random
 import string
+import json
 
 class AuthModel:
     @staticmethod
@@ -30,7 +31,7 @@ class AuthModel:
             conn = get_db_connection()
             cur = conn.cursor()
 
-            query = ("SELECT id, password, role FROM users WHERE username = %s;")
+            query = ("SELECT id, password, role, settings FROM users WHERE username = %s;")
             cur.execute(query, (u_name,))
             user = cur.fetchone()
 
@@ -80,6 +81,35 @@ class AuthModel:
             return rows_deleted
         except Exception as e:
             print(f"Error deleting user: {e}")
+            if conn: conn.rollback()
+            raise e
+        finally:
+            if cur: cur.close()
+            if conn: conn.close()
+    
+    @staticmethod
+    def update_user_settings(user_id, new_settings):
+        conn = None
+        cur = None
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+
+            query = """
+                UPDATE users 
+                SET settings = settings || %s 
+                WHERE id = %s
+                RETURNING settings;
+            """
+            
+            cur.execute(query, (json.dumps(new_settings), user_id))
+            updated_settings = cur.fetchone()[0]
+            
+            conn.commit()
+            return updated_settings
+
+        except Exception as e:
+            print(f"Error updating settings: {e}")
             if conn: conn.rollback()
             raise e
         finally:

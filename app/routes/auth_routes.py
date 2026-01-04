@@ -65,6 +65,7 @@ def login():
         user_id = user[0]
         stored_hash = user[1]
         role = user[2]
+        settings = user[3]
 
         if check_password_hash(stored_hash, u_pass):
             token = createToken(user_id, role)
@@ -73,7 +74,8 @@ def login():
                 "message": "Login successful",
                 "token": token,
                 "role": role,
-                "user_id": user_id
+                "user_id": user_id,
+                'settings': settings
             }), 200
     
     return jsonify({"error": "Invalid username or password"}), 401
@@ -91,6 +93,25 @@ def delete(current_user, id):
         "message": "Delete succesful",
         "user": deleted_user
     }), 200
+
+@auth_bp.route('/auth/settings', methods=['PUT'])
+@tokenRequired
+def update_settings(current_user):
+    new_settings = request.get_json()
+
+    if not new_settings:
+        return jsonify({"error": "No settings data provided"}), 400
+
+    try:
+        updated_settings = AuthModel.update_user_settings(current_user['user_id'], new_settings) 
+
+        return jsonify({
+            "message": "Settings updated successfully",
+            "settings": updated_settings
+        }), 200
+    except Exception as e:
+        print(f"Settings update failed: {e}")
+        return jsonify({"error": "Failed to update settings"}), 500
 
 @auth_bp.route('/auth/google', methods=['POST'])
 def google_login():
@@ -124,7 +145,8 @@ def google_login():
             "token": app_token,
             "role": user['role'],
             "user_id": user['id'],
-            "username": user['username']
+            "username": user['username'],
+            "settings": user.get('settings', {})
         }), 200
 
     except Exception as e:
