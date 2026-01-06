@@ -86,7 +86,7 @@ const Settings = () => {
 
             <div className="flex-grow flex items-center justify-center w-full px-4 py-6 z-10 relative">
                 
-                <div className="w-full max-w-2xl h-[650px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <div className="w-full max-w-2xl h-[550px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden flex flex-col">
 
                     <div className="p-6 border-b border-white/10 bg-black/10 flex flex-col items-center text-center flex-shrink-0">
                         <Title className='text-white font-bold text-2xl sm:text-3xl tracking-tight'>Settings</Title>
