@@ -12,10 +12,11 @@ import Button from '../components/ui/Button';
 import Title from '../components/ui/Title';
 import Input from '../components/ui/Input';
 
+import { useMutation } from '@tanstack/react-query';
+
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
     const { user, setUser } = useContext(UserContext);
     const { theme, toggleTheme } = useTheme()
     let navigate = useNavigate();
@@ -43,13 +44,10 @@ const Login = () => {
         onError: () => toast.error("Google Login Failed"),
     });
 
-    const handleLoginClick = async () => {
-        toast.dismiss();
-        setLoading(true)
-
-        try {
-            const response = await loginAuth(username, password);
-            const { accessToken, role, user_id, settings } = response.data;
+    const loginMutation = useMutation({
+        mutationFn: (credentials) => loginAuth(credentials.username, credentials.password),
+        onSuccess: (response) => {
+            const { accessToken, role, user_id, username, settings } = response.data;
 
             localStorage.setItem("authToken", accessToken); 
             localStorage.setItem("userDetails", JSON.stringify({ user_id, username, role, settings }));
@@ -58,12 +56,15 @@ const Login = () => {
 
             toast.success(`Welcome, ${username}`);
             navigate("/dashboard");
-        } catch(error) {
-            const message = error.response?.data?.message || "Login failed. Please try again.";
+        },
+        onError: (error) => {
+            const message = error.response?.data?.message || "Login failed.";
             toast.error(message);
-        } finally {
-            setLoading(false);
         }
+    });
+
+    const handleLoginClick = async () => {
+        loginMutation({ username, password });
     };
 
     const handleGoogleClick = () => {
@@ -184,11 +185,11 @@ const Login = () => {
                     <div className="mt-4 flex flex-col gap-3">
                             <Button 
                                 onClick={handleLoginClick} 
-                                disabled={loading}
+                                disabled={}
                                 className="w-full py-3"
                             >
-                            {loading ? (
-                                <BeatLoader color="white" loading={loading} size={8} margin={2} />
+                            {isPending ? (
+                                <BeatLoader color="white" loading={isPending} size={8} margin={2} />
                             ) : (
                                 "Sign In"
                             )}

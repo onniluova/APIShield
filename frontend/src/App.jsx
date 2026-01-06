@@ -17,8 +17,11 @@ import { ThemeProvider } from './context/ThemeContext'
 import { Toaster } from 'react-hot-toast';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,14 +38,16 @@ const router = createBrowserRouter(
 
 const App = () => {
   return (
-    <UserProvider>
-      <ThemeProvider>
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-        <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
-        <RouterProvider router={router} />
-        </GoogleOAuthProvider>
-      </ThemeProvider>
-    </UserProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <ThemeProvider>
+          <GoogleOAuthProvider clientId={CLIENT_ID}>
+          <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+          <RouterProvider router={router} />
+          </GoogleOAuthProvider>
+        </ThemeProvider>
+      </UserProvider>
+    </QueryClientProvider>
   )
 }
 
