@@ -89,7 +89,7 @@ const Settings = () => {
                 <div className="w-full max-w-2xl h-[650px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden flex flex-col">
 
                     <div className="p-6 border-b border-white/10 bg-black/10 flex flex-col items-center text-center flex-shrink-0">
-                        <Title className='text-white font-bold text-2xl sm:text-3xl tracking-tight'>Settings (UI Preview)</Title>
+                        <Title className='text-white font-bold text-2xl sm:text-3xl tracking-tight'>Settings</Title>
                         <p className="text-white/60 text-sm mt-1">Manage your account preferences and configurations.</p>
                     </div>
                     
