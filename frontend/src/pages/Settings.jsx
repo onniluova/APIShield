@@ -58,7 +58,6 @@ const Settings = () => {
             }
             
             toast.success("Settings updated succesfully.");
-            console.log(user)
         } catch(err) {
             toast.error(err?.message);
 

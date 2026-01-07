@@ -8,6 +8,7 @@ import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 import { loginAuth, registerAuth, googleAuth } from '../services/authService';
 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Button from '../components/ui/Button';
 import Title from '../components/ui/Title';
 import Input from '../components/ui/Input';
@@ -16,6 +17,7 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const { user, setUser } = useContext(UserContext);
     const { theme, toggleTheme } = useTheme()
@@ -92,6 +94,14 @@ const Login = () => {
             setIsLoginMode(false)
         } else {
             setIsLoginMode(true)
+        }
+    }
+
+    const handleShowPassword = () => {
+        if (!showPassword) {
+            setShowPassword(true)
+        } else {
+            setShowPassword(false)
         }
     }
 
@@ -185,11 +195,27 @@ const Login = () => {
                         <label className="block text-xs font-medium text-white mb-1 ml-1">
                             Password
                         </label>
-                        <Input 
-                            type="password"
-                            placeholder="••••••••" 
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                        <div className="relative">
+                            <Input 
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="pr-12"
+                            />
+                            
+                            <Button 
+                                type="button"
+                                variant="ghost"
+                                onClick={handleShowPassword} 
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-1 h-auto"
+                            >
+                                {showPassword ? (
+                                    <FaEyeSlash size={20} />
+                                ) : (
+                                    <FaEye size={20} />
+                                )}
+                            </Button>
+                        </div>
                     </div>
 
                         <div className="mt-4 flex flex-col gap-3">
@@ -206,7 +232,7 @@ const Login = () => {
                                     "Sign In"
                                 )}
                                 </Button>
-                                <Button variant="ghost" onClick={handleChangeMode}>No account? Register</Button>
+                                <Button className="text-xs" variant="ghost" onClick={handleChangeMode}>No account? Register</Button>
                             </>
                             )}
 
@@ -223,7 +249,7 @@ const Login = () => {
                                         "Create Account"
                                     )}
                                 </Button>
-                                 <Button variant="ghost" onClick={handleChangeMode}>Already have an account?</Button>
+                                 <Button className="text-xs" variant="ghost" onClick={handleChangeMode}>Already have an account?</Button>
                             </>
                             )}
                         <div className="relative flex py-2 items-center">
