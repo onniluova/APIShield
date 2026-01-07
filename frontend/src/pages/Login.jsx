@@ -16,8 +16,11 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+
     const { user, setUser } = useContext(UserContext);
     const { theme, toggleTheme } = useTheme()
+
+    const [isLoginMode, setIsLoginMode] = useState(true)
     let navigate = useNavigate();
 
     const loginWithGoogle = useGoogleLogin({
@@ -84,6 +87,14 @@ const Login = () => {
         localStorage.clear();
     }, []);
 
+    const handleChangeMode = () => {
+        if (isLoginMode) {
+            setIsLoginMode(false)
+        } else {
+            setIsLoginMode(true)
+        }
+    }
+
     const handleRegisterClick = async () => {
         toast.dismiss();
         setLoading(true)
@@ -133,7 +144,7 @@ const Login = () => {
         <div 
             onMouseMove={handleMouseMove}
             className="min-h-screen dark:bg-slate-900 dark:bg-none bg-gradient-to-br from-emerald-700 to-violet-700 flex items-center justify-center p-4 relative overflow-hidden"
-        >
+        >   
             <Button 
                 onClick={toggleTheme}
                 className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all border border-white/10 text-white shadow-lg cursor-pointer z-50"
@@ -155,7 +166,7 @@ const Login = () => {
                         Vahti
                     </p>
                     <Title className="text-4xl font-bold text-white mb-2">
-                        Login
+                        {isLoginMode ? "Login" : "Register"}
                     </Title>
                 </div>
 
@@ -181,31 +192,40 @@ const Login = () => {
                         />
                     </div>
 
-                    <div className="mt-4 flex flex-col gap-3">
-                            <Button 
-                                onClick={handleLoginClick} 
-                                disabled={loading}
-                                className="w-full py-3"
-                            >
-                            {loading ? (
-                                <BeatLoader color="white" loading={loading} size={8} margin={2} />
-                            ) : (
-                                "Sign In"
+                        <div className="mt-4 flex flex-col gap-3">
+                            {isLoginMode && (
+                            <>    
+                                <Button 
+                                    onClick={handleLoginClick} 
+                                    disabled={loading}
+                                    className="w-full py-3"
+                                >
+                                {loading ? (
+                                    <BeatLoader color="white" loading={loading} size={8} margin={2} />
+                                ) : (
+                                    "Sign In"
+                                )}
+                                </Button>
+                                <Button variant="ghost" onClick={handleChangeMode}>No account? Register</Button>
+                            </>
                             )}
-                        </Button>
 
-                        <Button
-                            onClick={handleRegisterClick} 
-                            disabled={loading}
-                            className="w-full py-3"
-                        >
-                            {loading ? (
-                                <BeatLoader color="white" loading={loading} size={5} margin={2} />
-                            ) : (
-                                "Create Account"
+                            {!isLoginMode && (
+                            <> 
+                                <Button
+                                    onClick={handleRegisterClick} 
+                                    disabled={loading}
+                                    className="w-full py-3"
+                                >
+                                    {loading ? (
+                                        <BeatLoader color="white" loading={loading} size={5} margin={2} />
+                                    ) : (
+                                        "Create Account"
+                                    )}
+                                </Button>
+                                 <Button variant="ghost" onClick={handleChangeMode}>Already have an account?</Button>
+                            </>
                             )}
-                        </Button>
-                        
                         <div className="relative flex py-2 items-center">
                             <div className="flex-grow border-t border-gray-200"></div>
                             <span className="flex-shrink mx-4 text-white text-xs">OR</span>
