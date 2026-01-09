@@ -63,7 +63,7 @@ def login():
     u_name = data.get('username')
     u_pass = data.get('password')
 
-    user = AuthModel.login(u_name, u_pass)
+    user = AuthModel.login(u_name)
 
     if user:
         user_id = user[0]
